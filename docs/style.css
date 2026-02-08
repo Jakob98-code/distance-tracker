@@ -30,8 +30,8 @@ body {
 .tulip-decoration {
   position: fixed;
   bottom: 0;
-  width: 100px;
-  height: 130px;
+  width: 110px;
+  height: 140px;
   z-index: 0;
   pointer-events: none;
 }
@@ -48,53 +48,33 @@ body {
   width: 100%;
   height: auto;
   overflow: visible;
-  filter: drop-shadow(0 10px 24px rgba(0,0,0,.55));
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.4)) drop-shadow(0 4px 8px rgba(0,0,0,.3));
 }
 
 /* The growing trick: scale from the bottom + fade in */
 .grow {
-  transform-origin: 100px 250px;
+  transform-origin: 100px 265px;
   transform: scaleY(var(--g, 1));
-  opacity: calc(.35 + var(--g, 1) * .65);
+  opacity: calc(.4 + var(--g, 1) * .6);
   transition: transform 600ms ease, opacity 600ms ease;
 }
 
-.stem {
-  fill: none;
-  stroke: rgba(180, 255, 210, .65);
-  stroke-width: 6;
-  stroke-linecap: round;
-}
-
-.leaf {
-  fill: rgba(140, 220, 180, .18);
-  stroke: rgba(170, 255, 220, .25);
-  stroke-width: 2;
-}
-
-.petal {
-  fill: rgba(255,255,255,.92);
-  stroke: rgba(255,255,255,.35);
-  stroke-width: 2;
-}
-
-.petalInner {
-  fill: rgba(255,255,255,.55);
-  stroke: rgba(255,255,255,.18);
-  stroke-width: 2;
+/* Petal front elements get extra brightness */
+.petal-front {
+  filter: drop-shadow(0 2px 4px rgba(255,255,255,0.3));
 }
 
 /* Gentle sway animation */
 .tulip-svg {
-  animation: gentleSway 4s ease-in-out infinite;
+  animation: gentleSway 5s ease-in-out infinite;
 }
 
 @keyframes gentleSway {
   0%, 100% {
-    transform: rotate(-2deg);
+    transform: rotate(-1.5deg);
   }
   50% {
-    transform: rotate(2deg);
+    transform: rotate(1.5deg);
   }
 }
 
