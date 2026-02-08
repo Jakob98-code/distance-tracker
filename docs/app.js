@@ -33,16 +33,36 @@ class AuthManager {
   }
 
   setupEventListeners() {
-    document.getElementById('auth-signin-btn').addEventListener('click', () => this.signIn());
-    document.getElementById('auth-signup-btn').addEventListener('click', () => this.signUp());
+    const signInBtn = document.getElementById('auth-signin-btn');
+    const signUpBtn = document.getElementById('auth-signup-btn');
+    const passwordField = document.getElementById('auth-password');
+    const signOutBtn = document.getElementById('sign-out-btn');
+
+    if (signInBtn) {
+      signInBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.signIn();
+      });
+    }
+    
+    if (signUpBtn) {
+      signUpBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.signUp();
+      });
+    }
     
     // Allow Enter key to submit
-    document.getElementById('auth-password').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') this.signIn();
-    });
+    if (passwordField) {
+      passwordField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') this.signIn();
+      });
+    }
 
     // Sign out button
-    document.getElementById('sign-out-btn')?.addEventListener('click', () => this.signOut());
+    if (signOutBtn) {
+      signOutBtn.addEventListener('click', () => this.signOut());
+    }
   }
 
   showAuthScreen() {
@@ -65,6 +85,23 @@ class AuthManager {
     document.getElementById('auth-error').classList.add('hidden');
   }
 
+  setLoading(loading) {
+    const signInBtn = document.getElementById('auth-signin-btn');
+    const signUpBtn = document.getElementById('auth-signup-btn');
+    
+    if (loading) {
+      signInBtn.disabled = true;
+      signUpBtn.disabled = true;
+      signInBtn.textContent = 'Please wait...';
+      signUpBtn.textContent = 'Please wait...';
+    } else {
+      signInBtn.disabled = false;
+      signUpBtn.disabled = false;
+      signInBtn.textContent = 'Sign In';
+      signUpBtn.textContent = 'Create Account';
+    }
+  }
+
   async signIn() {
     const email = document.getElementById('auth-email').value.trim();
     const password = document.getElementById('auth-password').value;
@@ -76,15 +113,20 @@ class AuthManager {
 
     try {
       this.hideError();
+      this.setLoading(true);
       await this.auth.signInWithEmailAndPassword(email, password);
     } catch (error) {
+      console.error('Sign in error:', error);
       this.showError(this.getErrorMessage(error.code));
+      this.setLoading(false);
     }
   }
 
   async signUp() {
     const email = document.getElementById('auth-email').value.trim();
     const password = document.getElementById('auth-password').value;
+
+    console.log('Sign up attempt:', email);
 
     if (!email || !password) {
       this.showError('Please enter email and password');
@@ -98,9 +140,14 @@ class AuthManager {
 
     try {
       this.hideError();
+      this.setLoading(true);
+      console.log('Creating account...');
       await this.auth.createUserWithEmailAndPassword(email, password);
+      console.log('Account created successfully');
     } catch (error) {
+      console.error('Sign up error:', error);
       this.showError(this.getErrorMessage(error.code));
+      this.setLoading(false);
     }
   }
 
