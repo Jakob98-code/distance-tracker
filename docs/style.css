@@ -30,11 +30,13 @@ body {
 .tulip-decoration {
   position: fixed;
   bottom: 0;
-  width: 120px;
-  height: auto;
+  width: 100px;
+  max-height: 120px;
+  object-fit: contain;
+  object-position: bottom;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.35;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
   animation: gentleSway 6s ease-in-out infinite;
   transform-origin: bottom center;
