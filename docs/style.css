@@ -22,34 +22,120 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
   position: relative;
+  overflow-x: hidden;
 }
 
-body::before {
-  content: "🤍";
+/* ========== TULIP DECORATIONS ========== */
+
+.tulip-decoration {
   position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 48px;
-  opacity: 0.3;
+  bottom: 0;
+  width: 60px;
+  height: 120px;
   z-index: 0;
-  animation: sway 3s ease-in-out infinite;
+  pointer-events: none;
 }
 
-body::after {
-  content: "🤍";
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  font-size: 48px;
-  opacity: 0.3;
-  z-index: 0;
-  animation: sway 3s ease-in-out infinite;
+.tulip-left {
+  left: 15px;
+}
+
+.tulip-right {
+  right: 15px;
+}
+
+.tulip-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+}
+
+/* Stem growing animation */
+.tulip-stem {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: growStem 2s ease-out forwards;
+}
+
+@keyframes growStem {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Leaves animation */
+.tulip-leaf {
+  opacity: 0;
+  transform-origin: center bottom;
+  animation: growLeaf 0.8s ease-out forwards;
+}
+
+.tulip-leaf-left {
+  animation-delay: 1.2s;
+}
+
+.tulip-leaf-right {
   animation-delay: 1.5s;
 }
 
-@keyframes sway {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
+@keyframes growLeaf {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Petals bloom animation */
+.tulip-petal {
+  opacity: 0;
+  transform-origin: center bottom;
+  animation: bloomPetal 1s ease-out forwards;
+}
+
+.petal-1 {
+  animation-delay: 1.8s;
+}
+
+.petal-2 {
+  animation-delay: 2s;
+}
+
+.petal-3 {
+  animation-delay: 2.2s;
+}
+
+@keyframes bloomPetal {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(10px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Gentle sway after bloom */
+.tulip-svg {
+  animation: gentleSway 4s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+@keyframes gentleSway {
+  0%, 100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
 }
 
 /* ========== PIN LOCK SCREEN ========== */
@@ -321,16 +407,6 @@ body::after {
   position: relative;
 }
 
-.header::before {
-  content: "🤍";
-  position: absolute;
-  left: 50%;
-  top: -10px;
-  transform: translateX(-50%);
-  font-size: 24px;
-  opacity: 0.4;
-}
-
 .title {
   font-size: 24px;
   font-weight: 700;
@@ -459,15 +535,6 @@ body::after {
   box-shadow: 0 4px 20px rgba(255, 107, 157, 0.1);
   position: relative;
   overflow: visible;
-}
-
-.stats-card::before {
-  content: "🤍";
-  position: absolute;
-  bottom: -5px;
-  left: 10px;
-  font-size: 20px;
-  opacity: 0.5;
 }
 
 .stats-grid {
@@ -775,25 +842,6 @@ body::after {
   background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 107, 157, 0.05) 100%);
   border: 2px solid rgba(255, 107, 157, 0.2);
   position: relative;
-}
-
-.love-card::before,
-.love-card::after {
-  content: "🤍";
-  position: absolute;
-  font-size: 24px;
-  opacity: 0.3;
-}
-
-.love-card::before {
-  top: 10px;
-  left: 10px;
-}
-
-.love-card::after {
-  bottom: 10px;
-  right: 10px;
-  transform: rotate(180deg);
 }
 
 .love-note {
