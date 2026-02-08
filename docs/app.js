@@ -478,7 +478,20 @@ class DistanceTracker {
           data.person1.lat, data.person1.lon,
           data.person2.lat, data.person2.lon
         );
-        document.getElementById('distance').textContent = `${Math.round(distance).toLocaleString()} km`;
+        const roundedDistance = Math.round(distance);
+        
+        // Update label with distance
+        document.getElementById('distance-label').textContent = `Our distance: ${roundedDistance.toLocaleString()} km`;
+        
+        // Show special message if together
+        const messageEl = document.getElementById('distance-message');
+        if (roundedDistance === 0) {
+          messageEl.textContent = "We're together! 🫶💕";
+          messageEl.style.display = 'block';
+        } else {
+          messageEl.textContent = '';
+          messageEl.style.display = 'none';
+        }
         
         // Update map
         this.updateMapMarkers(data.person1, data.person2);
