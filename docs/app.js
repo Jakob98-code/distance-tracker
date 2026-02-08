@@ -2,6 +2,185 @@
 // Distance Doesn't Matter - Real-Time App
 // ========================================
 
+// ========== PIN LOCK SYSTEM ==========
+class PinLock {
+  constructor(onUnlock) {
+    this.onUnlock = onUnlock;
+    this.enteredPin = '';
+    this.isSettingPin = false;
+    this.confirmPin = '';
+    this.maxAttempts = 5;
+    this.attempts = 0;
+    this.lockoutUntil = null;
+    
+    this.init();
+  }
+
+  init() {
+    // Check if locked out
+    const lockout = localStorage.getItem('pinLockout');
+    if (lockout && Date.now() < parseInt(lockout)) {
+      this.lockoutUntil = parseInt(lockout);
+    }
+
+    // Check if PIN exists
+    const hasPin = localStorage.getItem('appPinHash');
+    
+    if (!hasPin) {
+      // First time - set up PIN
+      this.isSettingPin = true;
+      this.showSetupMode();
+    } else if (this.lockoutUntil) {
+      this.showLockout();
+    }
+
+    this.setupKeypad();
+  }
+
+  showSetupMode() {
+    document.getElementById('pin-title').textContent = 'Create PIN';
+    document.getElementById('pin-subtitle').textContent = 'Choose a 4-digit PIN to protect your app';
+  }
+
+  showConfirmMode() {
+    document.getElementById('pin-title').textContent = 'Confirm PIN';
+    document.getElementById('pin-subtitle').textContent = 'Enter the PIN again to confirm';
+    this.clearDots();
+  }
+
+  showUnlockMode() {
+    document.getElementById('pin-title').textContent = 'Enter PIN';
+    document.getElementById('pin-subtitle').textContent = 'Enter your 4-digit PIN to unlock';
+  }
+
+  showLockout() {
+    const remaining = Math.ceil((this.lockoutUntil - Date.now()) / 1000 / 60);
+    document.getElementById('pin-title').textContent = '🔒 Locked';
+    document.getElementById('pin-subtitle').textContent = `Too many attempts. Try again in ${remaining} minutes.`;
+    document.getElementById('pin-error').classList.add('hidden');
+  }
+
+  setupKeypad() {
+    document.querySelectorAll('.pin-key').forEach(key => {
+      key.addEventListener('click', () => {
+        const value = key.dataset.key;
+        if (!value) return;
+        
+        // Check lockout
+        if (this.lockoutUntil && Date.now() < this.lockoutUntil) {
+          this.showLockout();
+          return;
+        } else if (this.lockoutUntil) {
+          // Lockout expired
+          this.lockoutUntil = null;
+          localStorage.removeItem('pinLockout');
+          this.attempts = 0;
+          this.showUnlockMode();
+        }
+
+        if (value === 'delete') {
+          this.deleteDigit();
+        } else {
+          this.addDigit(value);
+        }
+      });
+    });
+  }
+
+  addDigit(digit) {
+    if (this.enteredPin.length >= 4) return;
+    
+    this.enteredPin += digit;
+    this.updateDots();
+    
+    if (this.enteredPin.length === 4) {
+      setTimeout(() => this.handleComplete(), 200);
+    }
+  }
+
+  deleteDigit() {
+    this.enteredPin = this.enteredPin.slice(0, -1);
+    this.updateDots();
+    document.getElementById('pin-error').classList.add('hidden');
+  }
+
+  updateDots() {
+    const dots = document.querySelectorAll('.pin-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('filled', i < this.enteredPin.length);
+    });
+  }
+
+  clearDots() {
+    this.enteredPin = '';
+    this.updateDots();
+  }
+
+  async handleComplete() {
+    if (this.isSettingPin) {
+      if (!this.confirmPin) {
+        // First entry - save and ask for confirmation
+        this.confirmPin = this.enteredPin;
+        this.enteredPin = '';
+        this.showConfirmMode();
+      } else {
+        // Confirming PIN
+        if (this.enteredPin === this.confirmPin) {
+          // PINs match - save it
+          const hash = await this.hashPin(this.enteredPin);
+          localStorage.setItem('appPinHash', hash);
+          this.unlock();
+        } else {
+          // PINs don't match
+          document.getElementById('pin-error').textContent = "PINs don't match. Try again.";
+          document.getElementById('pin-error').classList.remove('hidden');
+          this.confirmPin = '';
+          this.enteredPin = '';
+          this.updateDots();
+          this.showSetupMode();
+        }
+      }
+    } else {
+      // Verifying PIN
+      const storedHash = localStorage.getItem('appPinHash');
+      const enteredHash = await this.hashPin(this.enteredPin);
+      
+      if (enteredHash === storedHash) {
+        this.unlock();
+      } else {
+        this.attempts++;
+        if (this.attempts >= this.maxAttempts) {
+          // Lock out for 15 minutes
+          this.lockoutUntil = Date.now() + 15 * 60 * 1000;
+          localStorage.setItem('pinLockout', this.lockoutUntil.toString());
+          this.showLockout();
+        } else {
+          document.getElementById('pin-error').textContent = `Incorrect PIN. ${this.maxAttempts - this.attempts} attempts left.`;
+          document.getElementById('pin-error').classList.remove('hidden');
+        }
+        this.clearDots();
+      }
+    }
+  }
+
+  async hashPin(pin) {
+    // Simple hash using Web Crypto API
+    const encoder = new TextEncoder();
+    const data = encoder.encode(pin + 'distance-salt-2025');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  unlock() {
+    document.getElementById('pin-lock-screen').classList.add('hidden');
+    document.getElementById('main-app').classList.remove('hidden');
+    this.onUnlock();
+  }
+}
+
+// ========== MAIN APP ==========
+
 class DistanceTracker {
   constructor() {
     this.db = null;
@@ -16,7 +195,7 @@ class DistanceTracker {
     this.relationshipStart = new Date('2025-02-28');
     this.nextMeetDate = new Date('2026-02-27');
     
-    this.init();
+    // Don't init automatically - wait for PIN unlock
   }
 
   async init() {
@@ -451,7 +630,13 @@ class DistanceTracker {
   }
 }
 
-// Initialize the app
+// Initialize the app with PIN lock
 document.addEventListener('DOMContentLoaded', () => {
-  window.app = new DistanceTracker();
+  const tracker = new DistanceTracker();
+  
+  // Initialize PIN lock - app starts after unlock
+  new PinLock(() => {
+    tracker.init();
+    window.app = tracker;
+  });
 });

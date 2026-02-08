@@ -20,7 +20,37 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 </head>
 <body>
-  <div class="container">
+  <!-- PIN Lock Screen -->
+  <div id="pin-lock-screen" class="pin-lock-screen">
+    <div class="pin-container">
+      <div class="pin-icon">🔒</div>
+      <h2 id="pin-title">Enter PIN</h2>
+      <p id="pin-subtitle" class="pin-subtitle">Enter your 4-digit PIN to unlock</p>
+      <div class="pin-dots" id="pin-dots">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+      <div id="pin-error" class="pin-error hidden">Incorrect PIN. Try again.</div>
+      <div class="pin-keypad">
+        <button class="pin-key" data-key="1">1</button>
+        <button class="pin-key" data-key="2">2</button>
+        <button class="pin-key" data-key="3">3</button>
+        <button class="pin-key" data-key="4">4</button>
+        <button class="pin-key" data-key="5">5</button>
+        <button class="pin-key" data-key="6">6</button>
+        <button class="pin-key" data-key="7">7</button>
+        <button class="pin-key" data-key="8">8</button>
+        <button class="pin-key" data-key="9">9</button>
+        <button class="pin-key pin-key-empty"></button>
+        <button class="pin-key" data-key="0">0</button>
+        <button class="pin-key pin-key-delete" data-key="delete">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container hidden" id="main-app">
     <!-- Header -->
     <header class="header">
       <h1 class="title">Distance Doesn't Matter <span class="heart">🫶</span></h1>
@@ -149,7 +179,7 @@
       <button id="install-btn" class="btn btn-primary">Install App</button>
       <button id="dismiss-install" class="btn btn-ghost">Maybe Later</button>
     </div>
-  </div>
+  </div> <!-- end main-app -->
 
   <!-- Leaflet for maps (free, no API key needed) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
