@@ -21,6 +21,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 </head>
 <body>
+  
+  <!-- ============================================
+       TULIP FIELD ANIMATION (DISABLED)
+       To enable: Remove the comments around this section
+       and uncomment the CSS/JS code below
+       ============================================ -->
+  <!-- 
+  <div id="tulip-field" class="field" aria-hidden="true"></div>
+  -->
+
   <!-- Decorative Tulips -->
   <div class="tulip-decoration tulip-left">
     <svg class="tulip-svg" viewBox="0 0 200 260" aria-label="Tulip">
@@ -298,9 +308,99 @@
     </div>
   </div> <!-- end main-app -->
 
+  <!-- ============================================
+       TULIP FIELD STYLES (DISABLED)
+       To enable: Remove the <!-- and --> comment markers
+       ============================================ -->
+  <!--
+  <style>
+    .field{
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .field .t{
+      position:absolute;
+      width: var(--s);
+      opacity: var(--o);
+      transform: translate(-50%, -50%) rotate(var(--r));
+      filter: blur(var(--b));
+    }
+    /* Keep the field subtle on dark UI */
+    .field .t svg{
+      width:100%;
+      height:auto;
+    }
+
+    /* Optional: slight breathing motion */
+    .field .t{
+      animation: floaty var(--d) ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100%{ transform: translate(-50%,-50%) rotate(var(--r)) translateY(0); }
+      50%{ transform: translate(-50%,-50%) rotate(var(--r)) translateY(-6px); }
+    }
+  </style>
+  -->
+
   <!-- Leaflet for maps (free, no API key needed) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- ============================================
+       TULIP FIELD SCRIPT (DISABLED)
+       To enable: Remove the <!-- and --> comment markers
+       ============================================ -->
+  <!--
+  <script>
+    const container = document.getElementById("tulip-field");
+
+    // Small tulip SVG as a string (white, minimal)
+    const tulipSVG = `
+    <svg viewBox="0 0 120 160">
+      <path d="M60 150 C60 120, 61 96, 60 76 C59 56, 56 44, 60 30"
+        fill="none" stroke="rgba(180,255,210,.35)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M58 110 C40 104, 34 120, 40 134 C48 152, 60 150, 66 144 C58 132, 56 122, 58 110Z"
+        fill="rgba(140,220,180,.10)" stroke="rgba(170,255,220,.12)" stroke-width="1.5"/>
+      <path d="M62 104 C82 98, 88 112, 84 130 C80 150, 64 152, 54 146 C64 134, 66 120, 62 104Z"
+        fill="rgba(140,220,180,.08)" stroke="rgba(170,255,220,.10)" stroke-width="1.5"/>
+      <path d="M60 18
+        C44 26, 38 44, 42 62
+        C46 82, 54 92, 60 100
+        C66 92, 74 82, 78 62
+        C82 44, 76 26, 60 18Z"
+        fill="rgba(255,255,255,.70)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+      <path d="M60 26
+        C52 38, 50 54, 53 68
+        C55 80, 58 90, 60 98
+        C62 90, 65 80, 67 68
+        C70 54, 68 38, 60 26Z"
+        fill="rgba(255,255,255,.38)" stroke="rgba(255,255,255,.10)" stroke-width="1.2"/>
+    </svg>`;
+
+    const rand = (a,b)=> a + Math.random()*(b-a);
+
+    function makeTulip(){
+      const d = document.createElement("div");
+      d.className = "t";
+      d.style.left = rand(0,100) + "%";
+      d.style.top  = rand(0,100) + "%";
+      d.style.setProperty("--s", rand(18, 56) + "px");
+      d.style.setProperty("--o", rand(0.05, 0.22).toFixed(2));
+      d.style.setProperty("--r", rand(-18, 18).toFixed(1) + "deg");
+      d.style.setProperty("--b", rand(0, 0.7).toFixed(2) + "px");
+      d.style.setProperty("--d", rand(5, 11).toFixed(1) + "s");
+      d.innerHTML = tulipSVG;
+      return d;
+    }
+
+    // Adjust count based on screen area
+    const count = Math.min(42, Math.max(18, Math.floor((innerWidth*innerHeight)/50000)));
+    for(let i=0;i<count;i++) container.appendChild(makeTulip());
+  </script>
+  -->
   
   <script src="app.js"></script>
 </body>
