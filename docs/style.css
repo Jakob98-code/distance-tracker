@@ -389,6 +389,76 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.stat-distance {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(107, 157, 255, 0.2) 100%);
+  border: 1px solid rgba(255, 107, 157, 0.3);
+}
+
+@media (min-width: 768px) {
+  .stat-distance {
+    grid-column: auto;
+  }
+}
+
+.distance-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.distance-initial {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.distance-connector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  max-width: 120px;
+}
+
+.distance-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 107, 157, 0.6), rgba(255, 107, 157, 0.2));
+  border-radius: 2px;
+}
+
+.distance-line:last-child {
+  background: linear-gradient(90deg, rgba(255, 107, 157, 0.2), rgba(255, 107, 157, 0.6));
+}
+
+.distance-heart {
+  font-size: 20px;
+  animation: heartBeat 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(255, 107, 157, 0.5));
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  10%, 30% { transform: scale(1.1); }
+  20%, 40% { transform: scale(1); }
+}
+
+.stat-distance .stat-value {
+  margin-top: 8px;
+}
+
 .stat-label {
   font-size: 11px;
   text-transform: uppercase;

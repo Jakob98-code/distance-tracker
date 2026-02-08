@@ -424,6 +424,12 @@ class DistanceTracker {
         document.getElementById('person2-name').textContent = this.config.person2Name || 'Person 2';
         document.getElementById('person1-label').textContent = this.config.person1Name || 'Person 1';
         document.getElementById('person2-label').textContent = this.config.person2Name || 'Person 2';
+        
+        // Update distance initials
+        const name1 = this.config.person1Name || 'P';
+        const name2 = this.config.person2Name || 'P';
+        document.getElementById('initial-1').textContent = name1.charAt(0).toUpperCase();
+        document.getElementById('initial-2').textContent = name2.charAt(0).toUpperCase();
       }
     }
   }
