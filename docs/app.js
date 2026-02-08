@@ -2,6 +2,133 @@
 // Distance Doesn't Matter - Real-Time App
 // ========================================
 
+// ========== FIREBASE AUTH SYSTEM ==========
+class AuthManager {
+  constructor(onAuthenticated) {
+    this.onAuthenticated = onAuthenticated;
+    this.user = null;
+    this.auth = null;
+  }
+
+  init(firebaseConfig) {
+    // Initialize Firebase if not already done
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    this.auth = firebase.auth();
+    
+    // Listen for auth state changes
+    this.auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.user = user;
+        this.hideAuthScreen();
+        this.onAuthenticated(user);
+      } else {
+        this.user = null;
+        this.showAuthScreen();
+      }
+    });
+
+    this.setupEventListeners();
+  }
+
+  setupEventListeners() {
+    document.getElementById('auth-signin-btn').addEventListener('click', () => this.signIn());
+    document.getElementById('auth-signup-btn').addEventListener('click', () => this.signUp());
+    
+    // Allow Enter key to submit
+    document.getElementById('auth-password').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') this.signIn();
+    });
+
+    // Sign out button
+    document.getElementById('sign-out-btn')?.addEventListener('click', () => this.signOut());
+  }
+
+  showAuthScreen() {
+    document.getElementById('auth-screen').classList.remove('hidden');
+    document.getElementById('pin-lock-screen').classList.add('hidden');
+    document.getElementById('main-app').classList.add('hidden');
+  }
+
+  hideAuthScreen() {
+    document.getElementById('auth-screen').classList.add('hidden');
+  }
+
+  showError(message) {
+    const errorEl = document.getElementById('auth-error');
+    errorEl.textContent = message;
+    errorEl.classList.remove('hidden');
+  }
+
+  hideError() {
+    document.getElementById('auth-error').classList.add('hidden');
+  }
+
+  async signIn() {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+
+    if (!email || !password) {
+      this.showError('Please enter email and password');
+      return;
+    }
+
+    try {
+      this.hideError();
+      await this.auth.signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      this.showError(this.getErrorMessage(error.code));
+    }
+  }
+
+  async signUp() {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+
+    if (!email || !password) {
+      this.showError('Please enter email and password');
+      return;
+    }
+
+    if (password.length < 6) {
+      this.showError('Password must be at least 6 characters');
+      return;
+    }
+
+    try {
+      this.hideError();
+      await this.auth.createUserWithEmailAndPassword(email, password);
+    } catch (error) {
+      this.showError(this.getErrorMessage(error.code));
+    }
+  }
+
+  async signOut() {
+    try {
+      await this.auth.signOut();
+      // Clear local data on sign out
+      localStorage.removeItem('appPinHash');
+      window.location.reload();
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  }
+
+  getErrorMessage(code) {
+    const messages = {
+      'auth/email-already-in-use': 'This email is already registered. Try signing in.',
+      'auth/invalid-email': 'Please enter a valid email address.',
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect password. Please try again.',
+      'auth/weak-password': 'Password should be at least 6 characters.',
+      'auth/too-many-requests': 'Too many attempts. Please try again later.',
+      'auth/invalid-credential': 'Invalid email or password.',
+    };
+    return messages[code] || 'An error occurred. Please try again.';
+  }
+}
+
 // ========== PIN LOCK SYSTEM ==========
 class PinLock {
   constructor(onUnlock) {
@@ -35,6 +162,10 @@ class PinLock {
     }
 
     this.setupKeypad();
+  }
+
+  show() {
+    document.getElementById('pin-lock-screen').classList.remove('hidden');
   }
 
   showSetupMode() {
@@ -630,13 +761,36 @@ class DistanceTracker {
   }
 }
 
-// Initialize the app with PIN lock
+// Initialize the app with Auth + PIN lock
 document.addEventListener('DOMContentLoaded', () => {
   const tracker = new DistanceTracker();
-  
-  // Initialize PIN lock - app starts after unlock
-  new PinLock(() => {
+  let pinLock = null;
+
+  // Load config to get Firebase settings
+  const savedConfig = localStorage.getItem('distanceTrackerConfig');
+  const config = savedConfig ? JSON.parse(savedConfig) : null;
+
+  if (config && config.firebaseConfig) {
+    // We have Firebase config - use auth flow
+    const authManager = new AuthManager((user) => {
+      console.log('Authenticated as:', user.email);
+      
+      // After auth, show PIN lock
+      pinLock = new PinLock(() => {
+        tracker.init();
+        window.app = tracker;
+      });
+      pinLock.show();
+    });
+
+    authManager.init(config.firebaseConfig);
+  } else {
+    // No config yet - skip auth, go to setup
+    // Hide auth screen, show main app directly for setup
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('pin-lock-screen').classList.add('hidden');
+    document.getElementById('main-app').classList.remove('hidden');
     tracker.init();
     window.app = tracker;
-  });
+  }
 });

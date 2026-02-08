@@ -17,11 +17,37 @@
   
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 </head>
 <body>
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="auth-container">
+      <div class="auth-icon">🫶</div>
+      <h1 class="auth-title">Distance Doesn't Matter</h1>
+      <p class="auth-subtitle">Sign in to access your tracker</p>
+      
+      <div id="auth-form" class="auth-form">
+        <div class="form-group">
+          <label for="auth-email">Email</label>
+          <input type="email" id="auth-email" placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div id="auth-error" class="auth-error hidden"></div>
+        <button id="auth-signin-btn" class="btn btn-primary btn-full">Sign In</button>
+        <button id="auth-signup-btn" class="btn btn-secondary btn-full">Create Account</button>
+      </div>
+      
+      <p class="auth-footer">Your data is protected with end-to-end security 🔒</p>
+    </div>
+  </div>
+
   <!-- PIN Lock Screen -->
-  <div id="pin-lock-screen" class="pin-lock-screen">
+  <div id="pin-lock-screen" class="pin-lock-screen hidden">
     <div class="pin-container">
       <div class="pin-icon">🔒</div>
       <h2 id="pin-title">Enter PIN</h2>
@@ -164,6 +190,9 @@
       </button>
       <button id="show-settings" class="btn btn-ghost">
         ⚙️ Settings
+      </button>
+      <button id="sign-out-btn" class="btn btn-ghost">
+        🚪 Sign Out
       </button>
     </div>
 
