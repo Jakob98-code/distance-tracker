@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0f17">
+  <meta name="description" content="Real-time distance tracker for long-distance relationships">
+  <title>Distance Doesn't Matter 🫶</title>
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">Distance Doesn't Matter <span class="heart">🫶</span></h1>
+      <p class="subtitle">Real-time tracker for <span id="person1-name">Jakob</span> & <span id="person2-name">❤️</span></p>
+    </header>
+
+    <!-- Setup Panel (shown first time) -->
+    <div id="setup-panel" class="card setup-panel hidden">
+      <h2>🔧 First Time Setup</h2>
+      <p>Configure your Firebase project and names:</p>
+      
+      <div class="form-group">
+        <label for="firebase-config">Firebase Config (paste JSON):</label>
+        <textarea id="firebase-config" rows="6" placeholder='{
+  "apiKey": "your-api-key",
+  "authDomain": "your-project.firebaseapp.com",
+  "databaseURL": "https://your-project-default-rtdb.firebaseio.com",
+  "projectId": "your-project"
+}'></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="setup-person1">Your Name:</label>
+          <input type="text" id="setup-person1" placeholder="Jakob">
+        </div>
+        <div class="form-group">
+          <label for="setup-person2">Partner's Name:</label>
+          <input type="text" id="setup-person2" placeholder="❤️">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="setup-couple-id">Unique Couple ID:</label>
+        <input type="text" id="setup-couple-id" placeholder="jakob-emma-2025">
+        <small>Share this ID with your partner so you both connect to the same tracker</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="setup-who">Who are you?</label>
+        <select id="setup-who">
+          <option value="person1">Person 1 (first name)</option>
+          <option value="person2">Person 2 (partner)</option>
+        </select>
+      </div>
+      
+      <button id="save-setup" class="btn btn-primary">Save & Start Tracking</button>
+    </div>
+
+    <!-- Connection Status -->
+    <div id="connection-status" class="connection-status">
+      <span class="status-dot"></span>
+      <span class="status-text">Connecting...</span>
+    </div>
+
+    <!-- Main Stats -->
+    <div class="card stats-card">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-label">Distance Right Now</div>
+          <div class="stat-value" id="distance">-- km</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Days Together</div>
+          <div class="stat-value" id="days-together">--</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Next Meet</div>
+          <div class="stat-value" id="days-until-meet">Soon ✨</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location Cards -->
+    <div class="locations-grid">
+      <!-- Person 1 -->
+      <div class="card location-card">
+        <div class="location-header">
+          <span class="location-emoji">📍</span>
+          <span class="location-name" id="person1-label">Jakob</span>
+        </div>
+        <div class="location-coords" id="person1-coords">Waiting for location...</div>
+        <div class="location-city" id="person1-city"></div>
+        <div class="location-updated" id="person1-updated">--</div>
+      </div>
+      
+      <!-- Person 2 -->
+      <div class="card location-card">
+        <div class="location-header">
+          <span class="location-emoji">📍</span>
+          <span class="location-name" id="person2-label">Partner</span>
+        </div>
+        <div class="location-coords" id="person2-coords">Waiting for location...</div>
+        <div class="location-city" id="person2-city"></div>
+        <div class="location-updated" id="person2-updated">--</div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="card map-card">
+      <div id="map"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="card controls-card">
+      <button id="update-location" class="btn btn-primary">
+        📍 Update My Location
+      </button>
+      <button id="toggle-tracking" class="btn btn-secondary">
+        🔄 Start Auto-Tracking
+      </button>
+      <button id="show-settings" class="btn btn-ghost">
+        ⚙️ Settings
+      </button>
+    </div>
+
+    <!-- Love Note -->
+    <div class="card love-card">
+      <p class="love-note">Distance is just a number.<br>What matters is that I choose you — every day.</p>
+      <p class="love-footer">P.S. If distance is a number, then my love is an invariant. ❤️</p>
+    </div>
+
+    <!-- Install Prompt -->
+    <div id="install-prompt" class="install-prompt hidden">
+      <p>📱 Install this app on your phone for quick access!</p>
+      <button id="install-btn" class="btn btn-primary">Install App</button>
+      <button id="dismiss-install" class="btn btn-ghost">Maybe Later</button>
+    </div>
+  </div>
+
+  <!-- Leaflet for maps (free, no API key needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script src="app.js"></script>
+</body>
+</html>

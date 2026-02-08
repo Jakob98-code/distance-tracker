@@ -1,0 +1,404 @@
+/* ========================================
+   Distance Doesn't Matter - Styles
+   ======================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%);
+  color: #e9eef7;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ========== HEADER ========== */
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 4px;
+}
+
+.heart {
+  display: inline-block;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.subtitle {
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+/* ========== CONNECTION STATUS ========== */
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #666;
+}
+
+.status-dot.connected {
+  background: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.status-dot.disconnected {
+  background: #fbbf24;
+}
+
+.status-dot.error {
+  background: #f87171;
+}
+
+/* ========== CARDS ========== */
+
+.card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* ========== STATS ========== */
+
+.stats-card {
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(107, 157, 255, 0.1) 100%);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  text-align: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.stat-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ========== LOCATION CARDS ========== */
+
+.locations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .locations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.location-card {
+  text-align: center;
+}
+
+.location-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.location-emoji {
+  font-size: 24px;
+}
+
+.location-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.location-coords {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.location-city {
+  font-size: 16px;
+  color: #ff6b9d;
+  margin-bottom: 4px;
+}
+
+.location-updated {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+/* ========== MAP ========== */
+
+.map-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+}
+
+.custom-marker {
+  font-size: 24px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== CONTROLS ========== */
+
+.controls-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-ghost:hover {
+  color: white;
+}
+
+/* ========== LOVE CARD ========== */
+
+.love-card {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 107, 157, 0.05) 100%);
+}
+
+.love-note {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.love-footer {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* ========== SETUP PANEL ========== */
+
+.setup-panel h2 {
+  margin-bottom: 12px;
+}
+
+.setup-panel p {
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 12px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #ff6b9d;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 500px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== INSTALL PROMPT ========== */
+
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #1a1f2e 0%, #0b0f17 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.install-prompt p {
+  margin-bottom: 16px;
+}
+
+.install-prompt .btn {
+  margin: 0 6px;
+}
+
+/* ========== UTILITIES ========== */
+
+.hidden {
+  display: none !important;
+}
+
+/* ========== LEAFLET OVERRIDES ========== */
+
+.leaflet-container {
+  background: #1a1f2e;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #1a1f2e;
+  color: #e9eef7;
+  border-radius: 12px;
+}
+
+.leaflet-popup-tip {
+  background: #1a1f2e;
+}
+
+.leaflet-control-attribution {
+  background: rgba(26, 31, 46, 0.8) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
