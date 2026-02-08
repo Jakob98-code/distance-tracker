@@ -1,5 +1,5 @@
 // Service Worker for Distance Doesn't Matter PWA
-const CACHE_NAME = 'distance-tracker-v3';
+const CACHE_NAME = 'distance-tracker-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
