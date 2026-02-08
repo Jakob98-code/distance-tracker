@@ -10,12 +10,12 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(135deg, #fdfbf7 0%, #f8f4ed 100%);
+  background: linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%);
   background-image: 
-    linear-gradient(135deg, #fdfbf7 0%, #f8f4ed 100%),
-    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(156, 163, 175, 0.08) 19px, rgba(156, 163, 175, 0.08) 20px),
-    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(156, 163, 175, 0.08) 19px, rgba(156, 163, 175, 0.08) 20px);
-  color: #1f2937;
+    linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255, 255, 255, 0.03) 19px, rgba(255, 255, 255, 0.03) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255, 255, 255, 0.03) 19px, rgba(255, 255, 255, 0.03) 20px);
+  color: #e9eef7;
   min-height: 100vh;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -25,7 +25,7 @@ body {
 }
 
 body::before {
-  content: "🌷";
+  content: "🤍";
   position: fixed;
   top: 20px;
   left: 20px;
@@ -36,7 +36,7 @@ body::before {
 }
 
 body::after {
-  content: "🌷";
+  content: "🤍";
   position: fixed;
   top: 20px;
   right: 20px;
@@ -293,7 +293,7 @@ body::after {
   position: fixed;
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(99, 102, 241, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.15);
   pointer-events: none;
   z-index: 0;
 }
@@ -322,7 +322,7 @@ body::after {
 }
 
 .header::before {
-  content: "🌷";
+  content: "🤍";
   position: absolute;
   left: 50%;
   top: -10px;
@@ -337,8 +337,8 @@ body::after {
   letter-spacing: 0.2px;
   margin-bottom: 6px;
   line-height: 1.3;
-  color: #1f2937;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: #e9eef7;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 768px) {
@@ -359,9 +359,9 @@ body::after {
 
 .subtitle {
   font-size: 15px;
-  opacity: 0.7;
+  opacity: 0.85;
   line-height: 1.4;
-  color: #6b7280;
+  color: #e9eef7;
 }
 
 /* ========== CONNECTION STATUS ========== */
@@ -374,14 +374,14 @@ body::after {
   margin-bottom: 18px;
   font-size: 13px;
   padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  border: 2px solid rgba(99, 102, 241, 0.2);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  color: #4b5563;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  color: #e9eef7;
   font-weight: 600;
 }
 
@@ -421,13 +421,13 @@ body::after {
 /* ========== CARDS ========== */
 
 .card {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(99, 102, 241, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.10);
   border-radius: 18px;
   padding: 18px;
   margin-bottom: 14px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(99, 102, 241, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 
@@ -438,7 +438,7 @@ body::after {
   right: 8px;
   width: 20px;
   height: 20px;
-  border: 1.5px solid rgba(99, 102, 241, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-left: none;
   border-bottom: none;
   pointer-events: none;
@@ -454,15 +454,15 @@ body::after {
 /* ========== STATS ========== */
 
 .stats-card {
-  background: linear-gradient(135deg, rgba(255, 182, 193, 0.15) 0%, rgba(255, 228, 225, 0.15) 100%);
-  border: 2px solid rgba(255, 182, 193, 0.3);
-  box-shadow: 0 4px 20px rgba(255, 105, 180, 0.1);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(107, 157, 255, 0.15) 100%);
+  border: 2px solid rgba(255, 107, 157, 0.2);
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.1);
   position: relative;
   overflow: visible;
 }
 
 .stats-card::before {
-  content: "🌷";
+  content: "🤍";
   position: absolute;
   bottom: -5px;
   left: 10px;
@@ -486,16 +486,16 @@ body::after {
 .stat {
   text-align: center;
   padding: 20px 16px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.25);
   border-radius: 14px;
-  border: 1.5px solid rgba(156, 163, 175, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .stat-distance {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, rgba(255, 182, 193, 0.25) 0%, rgba(255, 240, 245, 0.25) 100%);
-  border: 2px solid rgba(255, 182, 193, 0.4);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(107, 157, 255, 0.2) 100%);
+  border: 2px solid rgba(255, 107, 157, 0.3);
 }
 
 @media (min-width: 768px) {
@@ -572,17 +572,17 @@ body::after {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  opacity: 0.65;
+  opacity: 0.75;
   margin-bottom: 10px;
   font-weight: 600;
-  color: #6b7280;
+  color: #e9eef7;
 }
 
 .stat-value {
   font-size: 32px;
   font-weight: 800;
-  color: #1f2937;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
   line-height: 1.2;
 }
 
@@ -610,14 +610,14 @@ body::after {
 
 .location-card {
   text-align: center;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1.5px solid rgba(156, 163, 175, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .location-card:active {
   transform: scale(0.98);
-  border-color: rgba(255, 182, 193, 0.5);
+  border-color: rgba(255, 107, 157, 0.3);
 }
 
 .location-header {
@@ -627,7 +627,7 @@ body::after {
   gap: 10px;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1.5px solid rgba(156, 163, 175, 0.15);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
 }
 
 .location-emoji {
@@ -637,29 +637,29 @@ body::after {
 .location-name {
   font-size: 19px;
   font-weight: 700;
-  color: #1f2937;
+  color: #e9eef7;
 }
 
 .location-coords {
   font-family: 'Monaco', 'Menlo', monospace;
   font-size: 13px;
-  opacity: 0.5;
+  opacity: 0.6;
   margin-bottom: 6px;
   letter-spacing: 0.3px;
-  color: #6b7280;
+  color: #e9eef7;
 }
 
 .location-city {
   font-size: 17px;
-  color: #ec4899;
+  color: #ff6b9d;
   margin-bottom: 6px;
   font-weight: 600;
 }
 
 .location-updated {
   font-size: 11px;
-  opacity: 0.4;
-  color: #9ca3af;
+  opacity: 0.5;
+  color: #e9eef7;
 }
 
 /* ========== MAP ========== */
@@ -718,7 +718,6 @@ body::after {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #1f2937;
 }
 
 @media (min-width: 768px) {
@@ -738,51 +737,49 @@ body::after {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
-  border: 2px solid rgba(236, 72, 153, 0.2);
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
 }
 
 .btn-primary:active:not(:disabled) {
-  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 107, 157, 0.4);
 }
 
 .btn-secondary {
-  background: rgba(99, 102, 241, 0.1);
-  color: #4f46e5;
-  border: 2px solid rgba(99, 102, 241, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .btn-secondary:active:not(:disabled) {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .btn-ghost {
   background: transparent;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   min-height: 44px;
-  border: 1px solid rgba(156, 163, 175, 0.2);
 }
 
 .btn-ghost:active {
-  color: #374151;
-  background: rgba(156, 163, 175, 0.1);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ========== LOVE CARD ========== */
 
 .love-card {
   text-align: center;
-  background: linear-gradient(135deg, rgba(255, 182, 193, 0.2) 0%, rgba(255, 240, 245, 0.15) 100%);
-  border: 2px solid rgba(255, 182, 193, 0.3);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 107, 157, 0.05) 100%);
+  border: 2px solid rgba(255, 107, 157, 0.2);
   position: relative;
 }
 
 .love-card::before,
 .love-card::after {
-  content: "🌷";
+  content: "🤍";
   position: absolute;
   font-size: 24px;
   opacity: 0.3;
@@ -804,7 +801,7 @@ body::after {
   line-height: 1.7;
   margin-bottom: 14px;
   font-weight: 500;
-  color: #374151;
+  color: #e9eef7;
 }
 
 @media (min-width: 768px) {
@@ -815,9 +812,9 @@ body::after {
 
 .love-footer {
   font-size: 13px;
-  opacity: 0.6;
+  opacity: 0.7;
   line-height: 1.5;
-  color: #6b7280;
+  color: #e9eef7;
 }
 
 /* ========== SETUP PANEL ========== */
