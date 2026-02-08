@@ -30,51 +30,46 @@ body {
 .tulip-decoration {
   position: fixed;
   bottom: 0;
-  width: 110px;
-  height: 140px;
+  width: 120px;
+  height: auto;
   z-index: 0;
   pointer-events: none;
+  opacity: 0.4;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
+  animation: gentleSway 6s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
 .tulip-left {
-  left: 15px;
+  left: 10px;
 }
 
 .tulip-right {
-  right: 15px;
-}
-
-.tulip-svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,.4)) drop-shadow(0 4px 8px rgba(0,0,0,.3));
-}
-
-/* The growing trick: scale from the bottom + fade in */
-.grow {
-  transform-origin: 100px 265px;
-  transform: scaleY(var(--g, 1));
-  opacity: calc(.4 + var(--g, 1) * .6);
-  transition: transform 600ms ease, opacity 600ms ease;
-}
-
-/* Petal front elements get extra brightness */
-.petal-front {
-  filter: drop-shadow(0 2px 4px rgba(255,255,255,0.3));
+  right: 10px;
+  transform: scaleX(-1); /* Mirror the image */
 }
 
 /* Gentle sway animation */
-.tulip-svg {
-  animation: gentleSway 5s ease-in-out infinite;
-}
-
 @keyframes gentleSway {
   0%, 100% {
-    transform: rotate(-1.5deg);
+    transform: rotate(-2deg);
   }
   50% {
-    transform: rotate(1.5deg);
+    transform: rotate(2deg);
+  }
+}
+
+/* Mirror version for right tulip */
+.tulip-right {
+  animation: gentleSwayMirror 6s ease-in-out infinite;
+}
+
+@keyframes gentleSwayMirror {
+  0%, 100% {
+    transform: scaleX(-1) rotate(-2deg);
+  }
+  50% {
+    transform: scaleX(-1) rotate(2deg);
   }
 }
 

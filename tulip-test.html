@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tulip PNG Preview</title>
+
+<style>
+  body{
+    margin:0;
+    height:100vh;
+    background: linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%);
+    background-image: 
+      linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%),
+      repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255, 255, 255, 0.03) 19px, rgba(255, 255, 255, 0.03) 20px),
+      repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255, 255, 255, 0.03) 19px, rgba(255, 255, 255, 0.03) 20px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:sans-serif;
+    color:white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Bottom corner tulips */
+  .tulip-decoration {
+    position: fixed;
+    bottom: 0;
+    width: 120px;
+    height: auto;
+    opacity: 0.4;
+    pointer-events: none;
+    animation: sway 6s ease-in-out infinite;
+    transform-origin: bottom center;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
+  }
+
+  .tulip-left {
+    left: 10px;
+  }
+
+  .tulip-right {
+    right: 10px;
+    transform: scaleX(-1); /* Mirror the image */
+  }
+
+  @keyframes sway{
+    0%,100%{ transform:rotate(-2deg); }
+    50%{ transform:rotate(2deg); }
+  }
+
+  .tulip-right {
+    animation: swayMirror 6s ease-in-out infinite;
+  }
+
+  @keyframes swayMirror{
+    0%,100%{ transform:scaleX(-1) rotate(-2deg); }
+    50%{ transform:scaleX(-1) rotate(2deg); }
+  }
+
+  .card{
+    position:relative;
+    width:320px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius:14px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+    z-index: 10;
+  }
+
+  .title{
+    font-size:14px;
+    opacity:.7;
+    margin-bottom: 8px;
+  }
+
+  .distance{
+    font-size:32px;
+    font-weight:600;
+  }
+
+  .controls {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  label {
+    min-width: 80px;
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .value-display {
+    min-width: 45px;
+    text-align: right;
+    font-family: monospace;
+    font-size: 12px;
+    opacity: 0.6;
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- Left tulip -->
+  <img src="docs/icons/tulip-flower-tulip-e86aa6cc84acd5541c7c39395ff77aa9.png" 
+       class="tulip-decoration tulip-left" 
+       id="tulip-left"
+       alt="Tulip decoration">
+
+  <!-- Right tulip -->
+  <img src="docs/icons/tulip-flower-tulip-e86aa6cc84acd5541c7c39395ff77aa9.png" 
+       class="tulip-decoration tulip-right" 
+       id="tulip-right"
+       alt="Tulip decoration">
+
+  <div class="card">
+    <div class="title">Our Distance</div>
+    <div class="distance">1,243 km</div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label>Opacity:</label>
+        <input type="range" id="opacity" min="0" max="100" value="40">
+        <span class="value-display" id="opacity-value">40%</span>
+      </div>
+      <div class="control-group">
+        <label>Size:</label>
+        <input type="range" id="size" min="60" max="200" value="120">
+        <span class="value-display" id="size-value">120px</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const opacitySlider = document.getElementById('opacity');
+    const opacityValue = document.getElementById('opacity-value');
+    const sizeSlider = document.getElementById('size');
+    const sizeValue = document.getElementById('size-value');
+    const tulips = document.querySelectorAll('.tulip-decoration');
+
+    function updateOpacity() {
+      const value = opacitySlider.value;
+      tulips.forEach(tulip => {
+        tulip.style.opacity = value / 100;
+      });
+      opacityValue.textContent = value + '%';
+    }
+
+    function updateSize() {
+      const value = sizeSlider.value;
+      tulips.forEach(tulip => {
+        tulip.style.width = value + 'px';
+      });
+      sizeValue.textContent = value + 'px';
+    }
+
+    opacitySlider.addEventListener('input', updateOpacity);
+    sizeSlider.addEventListener('input', updateSize);
+  </script>
+
+</body>
+</html>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%);
+      background-image: 
+        linear-gradient(135deg, #0b0f17 0%, #1a1f2e 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255, 255, 255, 0.03) 19px, rgba(255, 255, 255, 0.03) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255, 255, 255, 0.03) 19px, rgba(255, 255, 255, 0.03) 20px);
+      color: #e9eef7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .info {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 600px;
+      text-align: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      min-width: 120px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .value-display {
+      min-width: 50px;
+      text-align: right;
+      font-family: monospace;
+      opacity: 0.7;
+    }
+
+    /* ========== TULIP DECORATIONS ========== */
+
+    .tulip-decoration {
+      position: fixed;
+      bottom: 0;
+      width: 110px;
+      height: 140px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .tulip-left {
+      left: 15px;
+    }
+
+    .tulip-right {
+      right: 15px;
+    }
+
+    .tulip-svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,.4)) drop-shadow(0 4px 8px rgba(0,0,0,.3));
+    }
+
+    /* The growing trick: scale from the bottom + fade in */
+    .grow {
+      transform-origin: 100px 265px;
+      transform: scaleY(var(--g, 1));
+      opacity: calc(.4 + var(--g, 1) * .6);
+      transition: transform 600ms ease, opacity 600ms ease;
+    }
+
+    /* Petal front elements get extra brightness */
+    .petal-front {
+      filter: drop-shadow(0 2px 4px rgba(255,255,255,0.3));
+    }
+
+    /* Gentle sway animation */
+    .tulip-svg {
+      animation: gentleSway 5s ease-in-out infinite;
+    }
+
+    @keyframes gentleSway {
+      0%, 100% {
+        transform: rotate(-1.5deg);
+      }
+      50% {
+        transform: rotate(1.5deg);
+      }
+    }
+
+    /* ========== SIMPLE TULIP (CENTER) ========== */
+
+    .tulip-wrap {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: grid;
+      gap: 14px;
+      place-items: center;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      width: min(360px, 100%);
+      z-index: 5;
+    }
+
+    .tulip {
+      width: 200px;
+      height: auto;
+      overflow: visible;
+      filter: drop-shadow(0 10px 24px rgba(0,0,0,.55));
+    }
+
+    /* The growing trick for simple tulip */
+    .grow-simple {
+      transform-origin: 100px 250px;
+      transform: scaleY(var(--g, 1));
+      opacity: calc(.35 + var(--g, 1) * .65);
+      transition: transform 600ms ease, opacity 600ms ease;
+    }
+
+    .stem-simple {
+      fill: none;
+      stroke: rgba(180, 255, 210, .65);
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+
+    .leaf-simple {
+      fill: rgba(140, 220, 180, .18);
+      stroke: rgba(170, 255, 220, .25);
+      stroke-width: 2;
+    }
+
+    .petal-simple {
+      fill: rgba(255,255,255,.92);
+      stroke: rgba(255,255,255,.35);
+      stroke-width: 2;
+    }
+
+    .petalInner-simple {
+      fill: rgba(255,255,255,.55);
+      stroke: rgba(255,255,255,.18);
+      stroke-width: 2;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Left Tulip -->
+  <div class="tulip-decoration tulip-left">
+    <svg class="tulip-svg" viewBox="0 0 200 280" aria-label="Tulip">
+      <defs>
+        <!-- Gradient for stem -->
+        <linearGradient id="stemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:rgb(100,180,120);stop-opacity:0.9" />
+          <stop offset="100%" style="stop-color:rgb(70,140,90);stop-opacity:0.8" />
+        </linearGradient>
+        <!-- Gradient for leaves -->
+        <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:rgb(120,200,140);stop-opacity:0.3" />
+          <stop offset="50%" style="stop-color:rgb(90,170,110);stop-opacity:0.25" />
+          <stop offset="100%" style="stop-color:rgb(70,140,90);stop-opacity:0.2" />
+        </linearGradient>
+        <!-- Gradient for petals -->
+        <radialGradient id="petalGrad" cx="50%" cy="30%">
+          <stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
+          <stop offset="70%" style="stop-color:rgb(250,248,252);stop-opacity:0.95" />
+          <stop offset="100%" style="stop-color:rgb(240,235,245);stop-opacity:0.9" />
+        </radialGradient>
+      </defs>
+      
+      <g class="grow">
+        <!-- Stem with gradient -->
+        <path class="stem" 
+          d="M100 265 C100 230, 102 200, 100 170 C98 140, 95 110, 100 85" 
+          fill="none" stroke="url(#stemGrad)" stroke-width="5" stroke-linecap="round"/>
+        
+        <!-- Left leaf with realistic curve -->
+        <path class="leaf"
+          d="M98 195 C75 190, 60 200, 58 218 C56 235, 65 248, 80 252 C90 248, 95 235, 98 220 Z"
+          fill="url(#leafGrad)" stroke="rgba(70,140,90,0.4)" stroke-width="1.5"/>
+        <!-- Leaf vein -->
+        <path d="M98 195 Q85 210, 80 235" 
+          fill="none" stroke="rgba(100,180,120,0.3)" stroke-width="1" stroke-linecap="round"/>
+        
+        <!-- Right leaf with realistic curve -->
+        <path class="leaf"
+          d="M102 185 C125 180, 140 190, 142 208 C144 225, 135 238, 120 242 C110 238, 105 225, 102 210 Z"
+          fill="url(#leafGrad)" stroke="rgba(70,140,90,0.4)" stroke-width="1.5"/>
+        <!-- Leaf vein -->
+        <path d="M102 185 Q115 200, 120 225" 
+          fill="none" stroke="rgba(100,180,120,0.3)" stroke-width="1" stroke-linecap="round"/>
+        
+        <!-- Individual realistic petals -->
+        <!-- Back left petal -->
+        <path class="petal"
+          d="M90 75 C75 68, 65 55, 62 40 C60 25, 68 12, 82 8 C92 10, 95 20, 98 35 C99 50, 96 65, 90 75 Z"
+          fill="url(#petalGrad)" stroke="rgba(220,220,230,0.5)" stroke-width="1.5"/>
+        
+        <!-- Back right petal -->
+        <path class="petal"
+          d="M110 75 C125 68, 135 55, 138 40 C140 25, 132 12, 118 8 C108 10, 105 20, 102 35 C101 50, 104 65, 110 75 Z"
+          fill="url(#petalGrad)" stroke="rgba(220,220,230,0.5)" stroke-width="1.5"/>
+        
+        <!-- Back center petal -->
+        <path class="petal"
+          d="M100 70 C100 55, 98 40, 95 25 C93 10, 95 2, 100 0 C105 2, 107 10, 105 25 C102 40, 100 55, 100 70 Z"
+          fill="url(#petalGrad)" stroke="rgba(230,230,240,0.6)" stroke-width="1.5"/>
+        
+        <!-- Front left petal (brighter) -->
+        <path class="petal-front"
+          d="M85 80 C72 70, 68 52, 70 35 C72 20, 82 10, 92 12 C98 18, 100 30, 100 48 C100 62, 93 72, 85 80 Z"
+          fill="rgba(255,255,255,0.95)" stroke="rgba(240,240,245,0.7)" stroke-width="1.5"/>
+        <!-- Front left petal highlight -->
+        <ellipse cx="88" cy="45" rx="8" ry="15" 
+          fill="rgba(255,255,255,0.4)" opacity="0.6"/>
+        
+        <!-- Front right petal (brighter) -->
+        <path class="petal-front"
+          d="M115 80 C128 70, 132 52, 130 35 C128 20, 118 10, 108 12 C102 18, 100 30, 100 48 C100 62, 107 72, 115 80 Z"
+          fill="rgba(255,255,255,0.95)" stroke="rgba(240,240,245,0.7)" stroke-width="1.5"/>
+        <!-- Front right petal highlight -->
+        <ellipse cx="112" cy="45" rx="8" ry="15" 
+          fill="rgba(255,255,255,0.4)" opacity="0.6"/>
+        
+        <!-- Center detail (pistil area) -->
+        <ellipse cx="100" cy="65" rx="6" ry="8" 
+          fill="rgba(255,250,240,0.3)" stroke="none"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Right Tulip -->
+  <div class="tulip-decoration tulip-right">
+    <svg class="tulip-svg" viewBox="0 0 200 280" aria-label="Tulip">
+      <defs>
+        <!-- Gradient for stem -->
+        <linearGradient id="stemGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:rgb(100,180,120);stop-opacity:0.9" />
+          <stop offset="100%" style="stop-color:rgb(70,140,90);stop-opacity:0.8" />
+        </linearGradient>
+        <!-- Gradient for leaves -->
+        <linearGradient id="leafGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:rgb(120,200,140);stop-opacity:0.3" />
+          <stop offset="50%" style="stop-color:rgb(90,170,110);stop-opacity:0.25" />
+          <stop offset="100%" style="stop-color:rgb(70,140,90);stop-opacity:0.2" />
+        </linearGradient>
+        <!-- Gradient for petals -->
+        <radialGradient id="petalGrad2" cx="50%" cy="30%">
+          <stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
+          <stop offset="70%" style="stop-color:rgb(250,248,252);stop-opacity:0.95" />
+          <stop offset="100%" style="stop-color:rgb(240,235,245);stop-opacity:0.9" />
+        </radialGradient>
+      </defs>
+      
+      <g class="grow">
+        <!-- Stem with gradient -->
+        <path class="stem" 
+          d="M100 265 C100 230, 98 200, 100 170 C102 140, 105 110, 100 85" 
+          fill="none" stroke="url(#stemGrad2)" stroke-width="5" stroke-linecap="round"/>
+        
+        <!-- Left leaf with realistic curve -->
+        <path class="leaf"
+          d="M98 190 C75 185, 60 195, 58 213 C56 230, 65 243, 80 247 C90 243, 95 230, 98 215 Z"
+          fill="url(#leafGrad2)" stroke="rgba(70,140,90,0.4)" stroke-width="1.5"/>
+        <!-- Leaf vein -->
+        <path d="M98 190 Q85 205, 80 230" 
+          fill="none" stroke="rgba(100,180,120,0.3)" stroke-width="1" stroke-linecap="round"/>
+        
+        <!-- Right leaf with realistic curve -->
+        <path class="leaf"
+          d="M102 180 C125 175, 140 185, 142 203 C144 220, 135 233, 120 237 C110 233, 105 220, 102 205 Z"
+          fill="url(#leafGrad2)" stroke="rgba(70,140,90,0.4)" stroke-width="1.5"/>
+        <!-- Leaf vein -->
+        <path d="M102 180 Q115 195, 120 220" 
+          fill="none" stroke="rgba(100,180,120,0.3)" stroke-width="1" stroke-linecap="round"/>
+        
+        <!-- Individual realistic petals -->
+        <!-- Back left petal -->
+        <path class="petal"
+          d="M90 75 C75 68, 65 55, 62 40 C60 25, 68 12, 82 8 C92 10, 95 20, 98 35 C99 50, 96 65, 90 75 Z"
+          fill="url(#petalGrad2)" stroke="rgba(220,220,230,0.5)" stroke-width="1.5"/>
+        
+        <!-- Back right petal -->
+        <path class="petal"
+          d="M110 75 C125 68, 135 55, 138 40 C140 25, 132 12, 118 8 C108 10, 105 20, 102 35 C101 50, 104 65, 110 75 Z"
+          fill="url(#petalGrad2)" stroke="rgba(220,220,230,0.5)" stroke-width="1.5"/>
+        
+        <!-- Back center petal -->
+        <path class="petal"
+          d="M100 70 C100 55, 98 40, 95 25 C93 10, 95 2, 100 0 C105 2, 107 10, 105 25 C102 40, 100 55, 100 70 Z"
+          fill="url(#petalGrad2)" stroke="rgba(230,230,240,0.6)" stroke-width="1.5"/>
+        
+        <!-- Front left petal (brighter) -->
+        <path class="petal-front"
+          d="M85 80 C72 70, 68 52, 70 35 C72 20, 82 10, 92 12 C98 18, 100 30, 100 48 C100 62, 93 72, 85 80 Z"
+          fill="rgba(255,255,255,0.95)" stroke="rgba(240,240,245,0.7)" stroke-width="1.5"/>
+        <!-- Front left petal highlight -->
+        <ellipse cx="88" cy="45" rx="8" ry="15" 
+          fill="rgba(255,255,255,0.4)" opacity="0.6"/>
+        
+        <!-- Front right petal (brighter) -->
+        <path class="petal-front"
+          d="M115 80 C128 70, 132 52, 130 35 C128 20, 118 10, 108 12 C102 18, 100 30, 100 48 C100 62, 107 72, 115 80 Z"
+          fill="rgba(255,255,255,0.95)" stroke="rgba(240,240,245,0.7)" stroke-width="1.5"/>
+        <!-- Front right petal highlight -->
+        <ellipse cx="112" cy="45" rx="8" ry="15" 
+          fill="rgba(255,255,255,0.4)" opacity="0.6"/>
+        
+        <!-- Center detail (pistil area) -->
+        <ellipse cx="100" cy="65" rx="6" ry="8" 
+          fill="rgba(255,250,240,0.3)" stroke="none"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Center Tulip (Simple Design) -->
+  <div class="tulip-wrap">
+    <svg class="tulip" viewBox="0 0 200 260" aria-label="Tulip">
+      <!-- group scales upward from the bottom -->
+      <g class="grow grow-simple">
+        <!-- stem -->
+        <path class="stem-simple" d="M100 245 C100 210, 102 185, 100 155 C98 125, 92 105, 100 75" />
+
+        <!-- left leaf -->
+        <path class="leaf-simple"
+          d="M98 185
+             C70 175, 58 200, 66 222
+             C74 246, 92 246, 102 236
+             C92 222, 92 202, 98 185Z"/>
+
+        <!-- right leaf -->
+        <path class="leaf-simple"
+          d="M102 175
+             C132 165, 146 188, 140 212
+             C134 238, 114 244, 98 238
+             C112 220, 110 198, 102 175Z"/>
+
+        <!-- flower outer -->
+        <path class="petal-simple"
+          d="M100 30
+             C72 44, 62 74, 70 106
+             C78 140, 92 154, 100 165
+             C108 154, 122 140, 130 106
+             C138 74, 128 44, 100 30Z"/>
+
+        <!-- flower inner (gives tulip depth) -->
+        <path class="petalInner-simple"
+          d="M100 40
+             C86 58, 84 84, 90 110
+             C94 128, 98 144, 100 156
+             C102 144, 106 128, 110 110
+             C116 84, 114 58, 100 40Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Info Panel -->
+  <div class="info">
+    <h1>🌷 Tulip Design Test</h1>
+    <p><strong>Left & Right:</strong> Realistic tulips with gradients and individual petals</p>
+    <p><strong>Center:</strong> Simple tulip with unified petal shapes</p>
+    
+    <div class="controls">
+      <div class="control-group">
+        <label>Growth Scale:</label>
+        <input type="range" id="growth" min="0" max="100" value="100">
+        <span class="value-display" id="growth-value">100%</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Growth control
+    const growthSlider = document.getElementById('growth');
+    const growthValue = document.getElementById('growth-value');
+    const tulips = document.querySelectorAll('.grow, .grow-simple');
+
+    function updateGrowth() {
+      const value = growthSlider.value;
+      const scale = value / 100;
+      tulips.forEach(tulip => {
+        tulip.style.setProperty('--g', scale);
+      });
+      growthValue.textContent = value + '%';
+    }
+
+    growthSlider.addEventListener('input', updateGrowth);
+    updateGrowth();
+  </script>
+</body>
+</html>
