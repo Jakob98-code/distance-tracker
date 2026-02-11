@@ -92,13 +92,13 @@ class AuthManager {
     if (loading) {
       signInBtn.disabled = true;
       signUpBtn.disabled = true;
-      signInBtn.textContent = 'Please wait...';
-      signUpBtn.textContent = 'Please wait...';
+      signInBtn.textContent = 'Attendere...';
+      signUpBtn.textContent = 'Attendere...';
     } else {
       signInBtn.disabled = false;
       signUpBtn.disabled = false;
-      signInBtn.textContent = 'Sign In';
-      signUpBtn.textContent = 'Create Account';
+      signInBtn.textContent = 'Accedi';
+      signUpBtn.textContent = 'Crea Account';
     }
   }
 
@@ -107,7 +107,7 @@ class AuthManager {
     const password = document.getElementById('auth-password').value;
 
     if (!email || !password) {
-      this.showError('Please enter email and password');
+      this.showError('Inserisci email e password');
       return;
     }
 
@@ -129,12 +129,12 @@ class AuthManager {
     console.log('Sign up attempt:', email);
 
     if (!email || !password) {
-      this.showError('Please enter email and password');
+      this.showError('Inserisci email e password');
       return;
     }
 
     if (password.length < 6) {
-      this.showError('Password must be at least 6 characters');
+      this.showError('La password deve avere almeno 6 caratteri');
       return;
     }
 
@@ -164,15 +164,15 @@ class AuthManager {
 
   getErrorMessage(code) {
     const messages = {
-      'auth/email-already-in-use': 'This email is already registered. Try signing in.',
-      'auth/invalid-email': 'Please enter a valid email address.',
-      'auth/user-not-found': 'No account found with this email.',
-      'auth/wrong-password': 'Incorrect password. Please try again.',
-      'auth/weak-password': 'Password should be at least 6 characters.',
-      'auth/too-many-requests': 'Too many attempts. Please try again later.',
-      'auth/invalid-credential': 'Invalid email or password.',
+      'auth/email-already-in-use': 'Questa email è già registrata. Prova ad accedere.',
+      'auth/invalid-email': 'Inserisci un indirizzo email valido.',
+      'auth/user-not-found': 'Nessun account trovato con questa email.',
+      'auth/wrong-password': 'Password errata. Riprova.',
+      'auth/weak-password': 'La password deve avere almeno 6 caratteri.',
+      'auth/too-many-requests': 'Troppi tentativi. Riprova più tardi.',
+      'auth/invalid-credential': 'Email o password non validi.',
     };
-    return messages[code] || 'An error occurred. Please try again.';
+    return messages[code] || 'Si è verificato un errore. Riprova.';
   }
 }
 
@@ -216,25 +216,25 @@ class PinLock {
   }
 
   showSetupMode() {
-    document.getElementById('pin-title').textContent = 'Create PIN';
-    document.getElementById('pin-subtitle').textContent = 'Choose a 4-digit PIN to protect your app';
+    document.getElementById('pin-title').textContent = 'Crea PIN';
+    document.getElementById('pin-subtitle').textContent = 'Scegli un PIN a 4 cifre per proteggere la tua app';
   }
 
   showConfirmMode() {
-    document.getElementById('pin-title').textContent = 'Confirm PIN';
-    document.getElementById('pin-subtitle').textContent = 'Enter the PIN again to confirm';
+    document.getElementById('pin-title').textContent = 'Conferma PIN';
+    document.getElementById('pin-subtitle').textContent = 'Inserisci di nuovo il PIN per confermare';
     this.clearDots();
   }
 
   showUnlockMode() {
-    document.getElementById('pin-title').textContent = 'Enter PIN';
-    document.getElementById('pin-subtitle').textContent = 'Enter your 4-digit PIN to unlock';
+    document.getElementById('pin-title').textContent = 'Inserisci PIN';
+    document.getElementById('pin-subtitle').textContent = 'Inserisci il tuo PIN a 4 cifre per sbloccare';
   }
 
   showLockout() {
     const remaining = Math.ceil((this.lockoutUntil - Date.now()) / 1000 / 60);
-    document.getElementById('pin-title').textContent = '🔒 Locked';
-    document.getElementById('pin-subtitle').textContent = `Too many attempts. Try again in ${remaining} minutes.`;
+    document.getElementById('pin-title').textContent = '🔒 Bloccato';
+    document.getElementById('pin-subtitle').textContent = `Troppi tentativi. Riprova tra ${remaining} minuti.`;
     document.getElementById('pin-error').classList.add('hidden');
   }
 
@@ -310,7 +310,7 @@ class PinLock {
           this.unlock();
         } else {
           // PINs don't match
-          document.getElementById('pin-error').textContent = "PINs don't match. Try again.";
+          document.getElementById('pin-error').textContent = "I PIN non corrispondono. Riprova.";
           document.getElementById('pin-error').classList.remove('hidden');
           this.confirmPin = '';
           this.enteredPin = '';
@@ -333,7 +333,7 @@ class PinLock {
           localStorage.setItem('pinLockout', this.lockoutUntil.toString());
           this.showLockout();
         } else {
-          document.getElementById('pin-error').textContent = `Incorrect PIN. ${this.maxAttempts - this.attempts} attempts left.`;
+          document.getElementById('pin-error').textContent = `PIN errato. ${this.maxAttempts - this.attempts} tentativi rimasti.`;
           document.getElementById('pin-error').classList.remove('hidden');
         }
         this.clearDots();
@@ -420,10 +420,10 @@ class DistanceTracker {
       panel.classList.add('hidden');
       // Update names
       if (this.config) {
-        document.getElementById('person1-name').textContent = this.config.person1Name || 'Person 1';
-        document.getElementById('person2-name').textContent = this.config.person2Name || 'Person 2';
-        document.getElementById('person1-label').textContent = this.config.person1Name || 'Person 1';
-        document.getElementById('person2-label').textContent = this.config.person2Name || 'Person 2';
+        document.getElementById('person1-name').textContent = this.config.person1Name || 'Persona 1';
+        document.getElementById('person2-name').textContent = this.config.person2Name || 'Persona 2';
+        document.getElementById('person1-label').textContent = this.config.person1Name || 'Persona 1';
+        document.getElementById('person2-label').textContent = this.config.person2Name || 'Persona 2';
         
         // Update distance initials
         const name1 = this.config.person1Name || 'P';
@@ -481,12 +481,12 @@ class DistanceTracker {
         const roundedDistance = Math.round(distance);
         
         // Update label with distance
-        document.getElementById('distance-label').textContent = `Our distance: ${roundedDistance.toLocaleString()} km`;
+        document.getElementById('distance-label').textContent = `La nostra distanza: ${roundedDistance.toLocaleString()} km`;
         
         // Show special message if together
         const messageEl = document.getElementById('distance-message');
         if (roundedDistance === 0) {
-          messageEl.textContent = "We're together! 🫶💕";
+          messageEl.textContent = "Siamo insieme! 🫶💕";
           messageEl.style.display = 'block';
         } else {
           messageEl.textContent = '';
@@ -501,7 +501,7 @@ class DistanceTracker {
     // Listen for connection state
     this.db.ref('.info/connected').on('value', (snapshot) => {
       if (snapshot.val() === true) {
-        this.updateConnectionStatus('connected', 'Connected');
+        this.updateConnectionStatus('connected', 'Connesso');
       } else {
         this.updateConnectionStatus('disconnected', 'Offline');
       }
@@ -581,7 +581,7 @@ class DistanceTracker {
     );
     
     this.isTracking = true;
-    document.getElementById('toggle-tracking').textContent = '⏹️ Stop Auto-Tracking';
+    document.getElementById('toggle-tracking').textContent = '⏹️ Ferma Tracciamento Auto';
   }
 
   stopTracking() {
@@ -590,7 +590,7 @@ class DistanceTracker {
       this.watchId = null;
     }
     this.isTracking = false;
-    document.getElementById('toggle-tracking').textContent = '🔄 Start Auto-Tracking';
+    document.getElementById('toggle-tracking').textContent = '🔄 Avvia Tracciamento Auto';
   }
 
   // ========== MAP ==========
@@ -628,11 +628,11 @@ class DistanceTracker {
     // Add new markers
     this.markers.person1 = L.marker([loc1.lat, loc1.lon], { icon: this.icons.person1 })
       .addTo(this.map)
-      .bindPopup(`${this.config.person1Name}<br>${loc1.city || 'Unknown'}`);
+      .bindPopup(`${this.config.person1Name}<br>${loc1.city || 'Sconosciuto'}`);
 
     this.markers.person2 = L.marker([loc2.lat, loc2.lon], { icon: this.icons.person2 })
       .addTo(this.map)
-      .bindPopup(`${this.config.person2Name}<br>${loc2.city || 'Unknown'}`);
+      .bindPopup(`${this.config.person2Name}<br>${loc2.city || 'Sconosciuto'}`);
 
     // Draw line between them
     this.polyline = L.polyline(
@@ -668,9 +668,9 @@ class DistanceTracker {
     if (this.nextMeetDate) {
       const daysUntil = Math.floor((this.nextMeetDate - today) / (1000 * 60 * 60 * 24));
       if (daysUntil >= 0) {
-        document.getElementById('days-until-meet').textContent = `${daysUntil} days`;
+        document.getElementById('days-until-meet').textContent = `${daysUntil} giorni`;
       } else {
-        document.getElementById('days-until-meet').textContent = 'Soon ✨';
+        document.getElementById('days-until-meet').textContent = 'Presto ✨';
       }
     }
 
@@ -681,10 +681,10 @@ class DistanceTracker {
   timeAgo(timestamp) {
     const seconds = Math.floor((Date.now() - timestamp) / 1000);
     
-    if (seconds < 60) return 'Just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
-    return `${Math.floor(seconds / 86400)} days ago`;
+    if (seconds < 60) return 'Proprio ora';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} min fa`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} ore fa`;
+    return `${Math.floor(seconds / 86400)} giorni fa`;
   }
 
   // ========== UTILITIES ==========
@@ -711,9 +711,9 @@ class DistanceTracker {
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
       );
       const data = await response.json();
-      return data.address.city || data.address.town || data.address.village || data.address.county || 'Unknown';
+      return data.address.city || data.address.town || data.address.village || data.address.county || 'Sconosciuto';
     } catch (e) {
-      return 'Unknown';
+      return 'Sconosciuto';
     }
   }
 
@@ -724,21 +724,21 @@ class DistanceTracker {
     document.getElementById('update-location').addEventListener('click', async () => {
       const btn = document.getElementById('update-location');
       btn.disabled = true;
-      btn.textContent = '📍 Getting location...';
+      btn.textContent = '📍 Ottenimento posizione...';
       
       try {
         const loc = await this.getCurrentLocation();
         await this.updateMyLocation(loc.lat, loc.lon);
-        btn.textContent = '✅ Location updated!';
+        btn.textContent = '✅ Posizione aggiornata!';
         setTimeout(() => {
-          btn.textContent = '📍 Update My Location';
+          btn.textContent = '📍 Aggiorna la Mia Posizione';
           btn.disabled = false;
         }, 2000);
       } catch (error) {
-        btn.textContent = '❌ Error getting location';
+        btn.textContent = '❌ Errore ottenimento posizione';
         console.error(error);
         setTimeout(() => {
-          btn.textContent = '📍 Update My Location';
+          btn.textContent = '📍 Aggiorna la Mia Posizione';
           btn.disabled = false;
         }, 2000);
       }
@@ -762,18 +762,21 @@ class DistanceTracker {
         document.getElementById('setup-person2').value = this.config.person2Name || '';
         document.getElementById('setup-couple-id').value = this.config.coupleId || '';
         document.getElementById('setup-who').value = this.config.whoAmI || 'person1';
-        document.getElementById('firebase-config').value = JSON.stringify(this.config.firebaseConfig, null, 2);
       }
     });
 
     // Save setup
     document.getElementById('save-setup').addEventListener('click', async () => {
       try {
-        const firebaseConfig = JSON.parse(document.getElementById('firebase-config').value);
+        // Use Firebase config from external file
+        const firebaseConfig = window.FIREBASE_CONFIG;
+        if (!firebaseConfig || !firebaseConfig.apiKey) {
+          throw new Error('Firebase config not found');
+        }
         const config = {
           firebaseConfig,
-          person1Name: document.getElementById('setup-person1').value || 'Person 1',
-          person2Name: document.getElementById('setup-person2').value || 'Person 2',
+          person1Name: document.getElementById('setup-person1').value || 'Persona 1',
+          person2Name: document.getElementById('setup-person2').value || 'Persona 2',
           coupleId: document.getElementById('setup-couple-id').value || 'default-couple',
           whoAmI: document.getElementById('setup-who').value
         };
@@ -783,7 +786,7 @@ class DistanceTracker {
         // Reload to apply
         window.location.reload();
       } catch (e) {
-        alert('Invalid Firebase config JSON. Please check the format.');
+        alert('Errore durante il salvataggio. Riprova.');
         console.error(e);
       }
     });

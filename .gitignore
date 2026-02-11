@@ -21,3 +21,6 @@ distance_doesnt_matter.html
 # OS
 .DS_Store
 Thumbs.db
+
+# Firebase config (contains secrets)
+docs/firebase-config.js
