@@ -14,11 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Inject Firebase Config
-        run: |
-          echo 'window.FIREBASE_CONFIG = ${{ secrets.FIREBASE_CONFIG }};' > docs/firebase-config.js
-          cat docs/firebase-config.js
-      
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
