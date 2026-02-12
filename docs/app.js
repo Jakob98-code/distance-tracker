@@ -770,8 +770,9 @@ class DistanceTracker {
       try {
         // Use Firebase config from external file
         const firebaseConfig = window.FIREBASE_CONFIG;
+        console.log('Firebase config:', firebaseConfig);
         if (!firebaseConfig || !firebaseConfig.apiKey) {
-          throw new Error('Firebase config not found');
+          throw new Error('Firebase config not found. Make sure firebase-config.js is loaded.');
         }
         const config = {
           firebaseConfig,
@@ -781,13 +782,15 @@ class DistanceTracker {
           whoAmI: document.getElementById('setup-who').value
         };
         
+        console.log('Saving config:', config);
         this.saveConfig(config);
+        console.log('Config saved successfully');
         
         // Reload to apply
         window.location.reload();
       } catch (e) {
-        alert('Errore durante il salvataggio. Riprova.');
-        console.error(e);
+        alert('Errore durante il salvataggio: ' + e.message);
+        console.error('Save error:', e);
       }
     });
   }
