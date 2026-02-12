@@ -2,6 +2,18 @@
 // Distance Doesn't Matter - Real-Time App
 // ========================================
 
+// ========== FIREBASE CONFIG ==========
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAb94k7A825Lsc8HJYFeTvl_IrS9GAoPpQ",
+  authDomain: "distance-tracker-c8bbf.firebaseapp.com",
+  databaseURL: "https://distance-tracker-c8bbf-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "distance-tracker-c8bbf",
+  storageBucket: "distance-tracker-c8bbf.firebasestorage.app",
+  messagingSenderId: "193644544453",
+  appId: "1:193644544453:web:4e02be877cf2267e6ccbac",
+  measurementId: "G-4Q1V14YHSS"
+};
+
 // ========== FIREBASE AUTH SYSTEM ==========
 class AuthManager {
   constructor(onAuthenticated) {
@@ -383,7 +395,7 @@ class DistanceTracker {
     // Load saved config
     this.config = this.loadConfig();
     
-    if (this.config && this.config.firebaseConfig) {
+    if (this.config) {
       this.showSetupPanel(false);
       await this.initFirebase();
       this.initMap();
@@ -438,8 +450,7 @@ class DistanceTracker {
 
   async initFirebase() {
     try {
-      const firebaseConfig = this.config.firebaseConfig;
-      firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(FIREBASE_CONFIG);
       this.db = firebase.database();
       this.updateConnectionStatus('connected', 'Connected');
       console.log('Firebase initialized');
@@ -768,14 +779,7 @@ class DistanceTracker {
     // Save setup
     document.getElementById('save-setup').addEventListener('click', async () => {
       try {
-        // Use Firebase config from external file
-        const firebaseConfig = window.FIREBASE_CONFIG;
-        console.log('Firebase config:', firebaseConfig);
-        if (!firebaseConfig || !firebaseConfig.apiKey) {
-          throw new Error('Firebase config not found. Make sure firebase-config.js is loaded.');
-        }
         const config = {
-          firebaseConfig,
           person1Name: document.getElementById('setup-person1').value || 'Persona 1',
           person2Name: document.getElementById('setup-person2').value || 'Persona 2',
           coupleId: document.getElementById('setup-couple-id').value || 'default-couple',
@@ -842,8 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedConfig = localStorage.getItem('distanceTrackerConfig');
   const config = savedConfig ? JSON.parse(savedConfig) : null;
 
-  if (config && config.firebaseConfig) {
-    // We have Firebase config - use auth flow
+  if (config) {
+    // We have config - use auth flow
     const authManager = new AuthManager((user) => {
       console.log('Authenticated as:', user.email);
       
@@ -855,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
       pinLock.show();
     });
 
-    authManager.init(config.firebaseConfig);
+    authManager.init(FIREBASE_CONFIG);
   } else {
     // No config yet - skip auth, go to setup
     // Hide auth screen, show main app directly for setup
