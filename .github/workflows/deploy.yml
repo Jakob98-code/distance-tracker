@@ -16,9 +16,8 @@ jobs:
       
       - name: Inject Firebase Config
         run: |
-          cat > docs/firebase-config.js << 'EOF'
-          window.FIREBASE_CONFIG = ${{ secrets.FIREBASE_CONFIG }};
-          EOF
+          echo 'window.FIREBASE_CONFIG = ${{ secrets.FIREBASE_CONFIG }};' > docs/firebase-config.js
+          cat docs/firebase-config.js
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
