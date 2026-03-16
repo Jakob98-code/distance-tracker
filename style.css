@@ -749,6 +749,82 @@ body {
 
 /* ========== LOVE CARD ========== */
 
+/* ========== THINKING OF YOU ========== */
+
+.thinking-card {
+  text-align: center;
+  padding: 20px;
+}
+
+.btn-love {
+  background: linear-gradient(135deg, #ff6b9d 0%, #ee5a24 50%, #ff6b9d 100%);
+  background-size: 200% auto;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 16px 32px;
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.4);
+  animation: loveShimmer 3s ease infinite;
+}
+
+.btn-love:active:not(:disabled) {
+  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(255, 107, 157, 0.5);
+}
+
+.btn-love:disabled {
+  opacity: 0.7;
+}
+
+@keyframes loveShimmer {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+.thinking-status {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #4ade80;
+}
+
+.thinking-status.hidden {
+  display: none;
+}
+
+.thinking-received {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff6b9d;
+  padding: 12px;
+  background: rgba(255, 107, 157, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 107, 157, 0.2);
+}
+
+.thinking-received.hidden {
+  display: none;
+}
+
+.thinking-received.thinking-animate {
+  animation: pulseGlow 1s ease-in-out 3;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 157, 0); }
+  50% { box-shadow: 0 0 20px rgba(255, 107, 157, 0.4); }
+}
+
+.btn-active {
+  opacity: 0.6;
+  background: rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+/* ========== LOVE CARD (continued) ========== */
+
 .love-card {
   text-align: center;
   background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(255, 107, 157, 0.05) 100%);

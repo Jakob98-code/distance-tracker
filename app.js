@@ -384,6 +384,7 @@ class DistanceTracker {
     this.trackingRetryCount = 0;
     this.trackingRetryMax = 5;
     this.trackingFallbackInterval = null;
+    this.messaging = null;
     
     // Relationship dates (configurable)
     this.relationshipStart = new Date('2025-02-28');
@@ -411,6 +412,9 @@ class DistanceTracker {
         console.log('Resuming auto-tracking from previous session');
         this.startTracking();
       }
+      
+      // Initialize push notifications
+      this.initPushNotifications();
     } else {
       this.showSetupPanel(true);
     }
@@ -866,6 +870,16 @@ class DistanceTracker {
       }
     });
 
+    // Thinking of you
+    document.getElementById('thinking-of-you-btn')?.addEventListener('click', () => {
+      this.sendThinkingOfYou();
+    });
+
+    // Enable notifications
+    document.getElementById('enable-notifications')?.addEventListener('click', () => {
+      this.requestNotificationPermission();
+    });
+
     // Settings
     document.getElementById('show-settings').addEventListener('click', () => {
       this.showSetupPanel(true);
@@ -899,6 +913,163 @@ class DistanceTracker {
         console.error('Save error:', e);
       }
     });
+  }
+
+  // ========== PUSH NOTIFICATIONS ==========
+
+  async initPushNotifications() {
+    try {
+      this.messaging = firebase.messaging();
+      
+      // If already granted, register token silently
+      if (Notification.permission === 'granted') {
+        await this.registerFCMToken();
+        this.updateNotificationButton(true);
+      }
+      
+      // Listen for foreground messages
+      this.messaging.onMessage((payload) => {
+        console.log('Foreground message:', payload);
+        this.showInAppNotification(payload);
+      });
+      
+      // Listen for "thinking of you" messages from partner via DB
+      this.listenForThinkingOfYou();
+    } catch (e) {
+      console.log('Push notifications not supported:', e.message);
+    }
+  }
+
+  async requestNotificationPermission() {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        await this.registerFCMToken();
+        this.updateNotificationButton(true);
+        console.log('Notification permission granted');
+      } else {
+        console.log('Notification permission denied');
+      }
+    } catch (e) {
+      console.error('Error requesting notification permission:', e);
+    }
+  }
+
+  async registerFCMToken() {
+    try {
+      const registration = await navigator.serviceWorker.getRegistration();
+      const token = await this.messaging.getToken({
+        vapidKey: this.getVapidKey(),
+        serviceWorkerRegistration: registration
+      });
+      
+      if (token) {
+        // Store token in Firebase under this user
+        const coupleId = this.config.coupleId;
+        const whoAmI = this.config.whoAmI;
+        await this.db.ref(`couples/${coupleId}/tokens/${whoAmI}`).set({
+          token: token,
+          updatedAt: Date.now()
+        });
+        console.log('FCM token registered');
+      }
+    } catch (e) {
+      console.error('Error getting FCM token:', e);
+    }
+  }
+
+  getVapidKey() {
+    // TODO: Replace with your VAPID key from Firebase Console
+    // Go to: Firebase Console > Project Settings > Cloud Messaging > Web Push certificates
+    // Click "Generate key pair" and paste the public key here
+    return 'BC5YxBQsYOiOyR_R_fHZljOACs7NsVXBwRGA_e7KeIejFwv-XowLMr_krfuXQUXKLSCkosyOQwaWaaWT6CAhnzo';
+  }
+
+  updateNotificationButton(enabled) {
+    const btn = document.getElementById('enable-notifications');
+    if (!btn) return;
+    if (enabled) {
+      btn.textContent = '🔔 Notifiche Attive';
+      btn.disabled = true;
+      btn.classList.add('btn-active');
+    }
+  }
+
+  async sendThinkingOfYou() {
+    const coupleId = this.config.coupleId;
+    const whoAmI = this.config.whoAmI;
+    const myName = this.config[`${whoAmI}Name`] || 'Il tuo partner';
+    const partner = whoAmI === 'person1' ? 'person2' : 'person1';
+
+    const btn = document.getElementById('thinking-of-you-btn');
+    btn.disabled = true;
+    btn.textContent = '💕 Inviato!';
+
+    // Write a notification to the DB — the Cloud Function will pick it up and send a push
+    await this.db.ref(`couples/${coupleId}/notifications`).push({
+      type: 'thinking-of-you',
+      from: whoAmI,
+      to: partner,
+      senderName: myName,
+      message: `${myName} sta pensando a te 💕`,
+      timestamp: Date.now(),
+      read: false
+    });
+
+    const statusEl = document.getElementById('thinking-status');
+    statusEl.textContent = '💌 Il tuo messaggio è stato inviato!';
+    statusEl.classList.remove('hidden');
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = '💕 Sto Pensando a Te';
+      statusEl.classList.add('hidden');
+    }, 3000);
+  }
+
+  listenForThinkingOfYou() {
+    const coupleId = this.config.coupleId;
+    const whoAmI = this.config.whoAmI;
+
+    // Listen for new notifications directed at me
+    const notifRef = this.db.ref(`couples/${coupleId}/notifications`);
+    notifRef.orderByChild('to').equalTo(whoAmI).limitToLast(1)
+      .on('child_added', (snapshot) => {
+        const data = snapshot.val();
+        if (!data || data.read) return;
+
+        // Only show if recent (within last 30 seconds) to avoid replaying old ones
+        if (Date.now() - data.timestamp > 30000) return;
+
+        // Show in-app notification
+        const receivedEl = document.getElementById('thinking-received');
+        receivedEl.textContent = `💕 ${data.senderName} sta pensando a te!`;
+        receivedEl.classList.remove('hidden');
+        receivedEl.classList.add('thinking-animate');
+
+        // Mark as read
+        snapshot.ref.update({ read: true });
+
+        setTimeout(() => {
+          receivedEl.classList.add('hidden');
+          receivedEl.classList.remove('thinking-animate');
+        }, 5000);
+      });
+  }
+
+  showInAppNotification(payload) {
+    const { title, body } = payload.notification || {};
+    if (!title) return;
+
+    const receivedEl = document.getElementById('thinking-received');
+    receivedEl.textContent = `${title}: ${body}`;
+    receivedEl.classList.remove('hidden');
+    receivedEl.classList.add('thinking-animate');
+
+    setTimeout(() => {
+      receivedEl.classList.add('hidden');
+      receivedEl.classList.remove('thinking-animate');
+    }, 5000);
   }
 
   // ========== PWA ==========
