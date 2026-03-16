@@ -754,15 +754,7 @@ class DistanceTracker {
       }
     }
     
-    // Show staleness warning if location is old
-    const ageMinutes = (Date.now() - data.timestamp) / 60000;
-    if (ageMinutes > 30) {
-      updatedEl.textContent = `⚠️ ${this.timeAgo(data.timestamp)} — posizione potrebbe non essere aggiornata`;
-      updatedEl.classList.add('location-stale');
-    } else {
-      updatedEl.textContent = this.timeAgo(data.timestamp);
-      updatedEl.classList.remove('location-stale');
-    }
+    updatedEl.textContent = this.timeAgo(data.timestamp);
   }
 
   updateDaysCounter() {
