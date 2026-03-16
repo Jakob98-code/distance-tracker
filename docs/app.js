@@ -405,6 +405,12 @@ class DistanceTracker {
       this.initMap();
       this.updateDaysCounter();
       this.listenToLocations();
+      
+      // Auto-resume tracking if it was active before the app was closed
+      if (localStorage.getItem('autoTrackingEnabled') === 'true') {
+        console.log('Resuming auto-tracking from previous session');
+        this.startTracking();
+      }
     } else {
       this.showSetupPanel(true);
     }
@@ -421,10 +427,15 @@ class DistanceTracker {
 
   setupVisibilityHandler() {
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && this.isTracking) {
-        console.log('App returned to foreground — restarting tracking');
-        // watchPosition often dies in background; restart it
-        this.restartTracking();
+      if (document.visibilityState === 'visible') {
+        if (this.isTracking) {
+          console.log('App returned to foreground — restarting tracking');
+          this.restartTracking();
+        } else if (localStorage.getItem('autoTrackingEnabled') === 'true') {
+          // App was killed and reopened — resume tracking
+          console.log('Resuming auto-tracking after app reactivation');
+          this.startTracking();
+        }
       }
     });
   }
@@ -624,6 +635,7 @@ class DistanceTracker {
     }, 3 * 60 * 1000); // Every 3 minutes
     
     this.isTracking = true;
+    localStorage.setItem('autoTrackingEnabled', 'true');
     document.getElementById('toggle-tracking').textContent = '⏹️ Ferma Tracciamento Auto';
   }
 
@@ -670,6 +682,7 @@ class DistanceTracker {
     }
     this.isTracking = false;
     this.trackingRetryCount = 0;
+    localStorage.setItem('autoTrackingEnabled', 'false');
     document.getElementById('toggle-tracking').textContent = '🔄 Avvia Tracciamento Auto';
   }
 
