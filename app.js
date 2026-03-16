@@ -383,7 +383,7 @@ class DistanceTracker {
     
     // Relationship dates (configurable)
     this.relationshipStart = new Date('2025-02-28');
-    this.nextMeetDate = new Date('2026-02-27');
+    this.nextMeetDate = new Date('2026-04-01');
     
     // Don't init automatically - wait for PIN unlock
   }
@@ -677,7 +677,7 @@ class DistanceTracker {
     document.getElementById('days-together').textContent = daysTogether;
 
     if (this.nextMeetDate) {
-      const daysUntil = Math.floor((this.nextMeetDate - today) / (1000 * 60 * 60 * 24));
+      const daysUntil = Math.floor((this.nextMeetDate - today) / (1000 * 60 * 60 * 24)) -1; // -1 to count full days
       if (daysUntil >= 0) {
         document.getElementById('days-until-meet').textContent = `${daysUntil} giorni`;
       } else {
