@@ -623,12 +623,6 @@ body {
   color: #e9eef7;
 }
 
-.location-updated.location-stale {
-  color: #fbbf24;
-  opacity: 0.9;
-  font-weight: 600;
-}
-
 .location-accuracy {
   font-size: 11px;
   margin-bottom: 4px;
