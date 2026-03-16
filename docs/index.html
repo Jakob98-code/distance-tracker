@@ -19,6 +19,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
 </head>
 <body>
   
@@ -200,6 +201,15 @@
       </div>
     </div>
 
+    <!-- Thinking of You -->
+    <div class="card thinking-card">
+      <button id="thinking-of-you-btn" class="btn btn-love">
+        💕 Sto Pensando a Te
+      </button>
+      <div id="thinking-status" class="thinking-status hidden"></div>
+      <div id="thinking-received" class="thinking-received hidden"></div>
+    </div>
+
     <!-- Controls -->
     <div class="card controls-card">
       <button id="update-location" class="btn btn-primary">
@@ -207,6 +217,9 @@
       </button>
       <button id="toggle-tracking" class="btn btn-secondary">
         🔄 Avvia Tracciamento Auto
+      </button>
+      <button id="enable-notifications" class="btn btn-secondary">
+        🔔 Attiva Notifiche
       </button>
       <button id="show-settings" class="btn btn-ghost">
         ⚙️ Impostazioni
