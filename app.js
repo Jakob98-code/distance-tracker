@@ -380,6 +380,10 @@ class DistanceTracker {
     this.polyline = null;
     this.watchId = null;
     this.isTracking = false;
+    this.daysCounterInterval = null;
+    this.trackingRetryCount = 0;
+    this.trackingRetryMax = 5;
+    this.trackingFallbackInterval = null;
     
     // Relationship dates (configurable)
     this.relationshipStart = new Date('2025-02-28');
@@ -405,11 +409,24 @@ class DistanceTracker {
       this.showSetupPanel(true);
     }
     
+    // Restart tracking when the app comes back to foreground
+    this.setupVisibilityHandler();
+    
     // PWA install prompt
     this.setupInstallPrompt();
     
     // Register service worker
     this.registerServiceWorker();
+  }
+
+  setupVisibilityHandler() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && this.isTracking) {
+        console.log('App returned to foreground — restarting tracking');
+        // watchPosition often dies in background; restart it
+        this.restartTracking();
+      }
+    });
   }
 
   // ========== CONFIG & SETUP ==========
@@ -519,13 +536,14 @@ class DistanceTracker {
     });
   }
 
-  async updateMyLocation(lat, lon) {
+  async updateMyLocation(lat, lon, accuracy) {
     const coupleId = this.config.coupleId;
     const whoAmI = this.config.whoAmI; // 'person1' or 'person2'
     
     const locationData = {
       lat: lat,
       lon: lon,
+      accuracy: accuracy || null,
       timestamp: Date.now(),
       updatedAt: new Date().toISOString()
     };
@@ -564,8 +582,8 @@ class DistanceTracker {
         },
         {
           enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 60000
+          timeout: 15000,
+          maximumAge: 10000
         }
       );
     });
@@ -573,26 +591,72 @@ class DistanceTracker {
 
   startTracking() {
     if (this.watchId) return;
+    this.trackingRetryCount = 0;
     
     this.watchId = navigator.geolocation.watchPosition(
       async (position) => {
+        this.trackingRetryCount = 0; // Reset on success
         await this.updateMyLocation(
           position.coords.latitude,
-          position.coords.longitude
+          position.coords.longitude,
+          position.coords.accuracy
         );
       },
       (error) => {
         console.error('Tracking error:', error);
+        this.handleTrackingError(error);
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 30000
+        timeout: 20000,
+        maximumAge: 5000
       }
     );
     
+    // Fallback: periodically poll getCurrentPosition in case watchPosition silently stops
+    this.trackingFallbackInterval = setInterval(async () => {
+      try {
+        const loc = await this.getCurrentLocation();
+        await this.updateMyLocation(loc.lat, loc.lon, loc.accuracy);
+      } catch (e) {
+        console.log('Fallback location poll failed:', e.message);
+      }
+    }, 3 * 60 * 1000); // Every 3 minutes
+    
     this.isTracking = true;
     document.getElementById('toggle-tracking').textContent = '⏹️ Ferma Tracciamento Auto';
+  }
+
+  handleTrackingError(error) {
+    if (this.trackingRetryCount >= this.trackingRetryMax) {
+      console.warn('Max tracking retries reached — falling back to manual polling');
+      return;
+    }
+    this.trackingRetryCount++;
+    const delay = Math.min(1000 * Math.pow(2, this.trackingRetryCount), 30000);
+    console.log(`Retrying tracking in ${delay}ms (attempt ${this.trackingRetryCount})`);
+    
+    setTimeout(() => {
+      if (!this.isTracking) return;
+      this.restartTracking();
+    }, delay);
+  }
+
+  restartTracking() {
+    // Clear existing watch without changing isTracking state
+    if (this.watchId) {
+      navigator.geolocation.clearWatch(this.watchId);
+      this.watchId = null;
+    }
+    if (this.trackingFallbackInterval) {
+      clearInterval(this.trackingFallbackInterval);
+      this.trackingFallbackInterval = null;
+    }
+    // Re-register if still tracking
+    if (this.isTracking) {
+      this.isTracking = false; // Let startTracking set it back
+      this.startTracking();
+    }
   }
 
   stopTracking() {
@@ -600,7 +664,12 @@ class DistanceTracker {
       navigator.geolocation.clearWatch(this.watchId);
       this.watchId = null;
     }
+    if (this.trackingFallbackInterval) {
+      clearInterval(this.trackingFallbackInterval);
+      this.trackingFallbackInterval = null;
+    }
     this.isTracking = false;
+    this.trackingRetryCount = 0;
     document.getElementById('toggle-tracking').textContent = '🔄 Avvia Tracciamento Auto';
   }
 
@@ -665,10 +734,35 @@ class DistanceTracker {
     const coordsEl = document.getElementById(`${person}-coords`);
     const cityEl = document.getElementById(`${person}-city`);
     const updatedEl = document.getElementById(`${person}-updated`);
+    const accuracyEl = document.getElementById(`${person}-accuracy`);
 
     coordsEl.textContent = `${data.lat.toFixed(4)}, ${data.lon.toFixed(4)}`;
     cityEl.textContent = data.city || '';
-    updatedEl.textContent = this.timeAgo(data.timestamp);
+    
+    // Show accuracy if available
+    if (accuracyEl && data.accuracy) {
+      const acc = Math.round(data.accuracy);
+      if (acc < 50) {
+        accuracyEl.textContent = `📡 Precisione: ~${acc}m`;
+        accuracyEl.className = 'location-accuracy accuracy-good';
+      } else if (acc < 200) {
+        accuracyEl.textContent = `📡 Precisione: ~${acc}m`;
+        accuracyEl.className = 'location-accuracy accuracy-ok';
+      } else {
+        accuracyEl.textContent = `⚠️ Precisione bassa: ~${acc}m`;
+        accuracyEl.className = 'location-accuracy accuracy-poor';
+      }
+    }
+    
+    // Show staleness warning if location is old
+    const ageMinutes = (Date.now() - data.timestamp) / 60000;
+    if (ageMinutes > 30) {
+      updatedEl.textContent = `⚠️ ${this.timeAgo(data.timestamp)} — posizione potrebbe non essere aggiornata`;
+      updatedEl.classList.add('location-stale');
+    } else {
+      updatedEl.textContent = this.timeAgo(data.timestamp);
+      updatedEl.classList.remove('location-stale');
+    }
   }
 
   updateDaysCounter() {
@@ -685,8 +779,11 @@ class DistanceTracker {
       }
     }
 
-    // Update every minute
-    setInterval(() => this.updateDaysCounter(), 60000);
+    // Update every minute (clear previous interval to avoid stacking)
+    if (this.daysCounterInterval) {
+      clearInterval(this.daysCounterInterval);
+    }
+    this.daysCounterInterval = setInterval(() => this.updateDaysCounter(), 60000);
   }
 
   timeAgo(timestamp) {
@@ -739,7 +836,7 @@ class DistanceTracker {
       
       try {
         const loc = await this.getCurrentLocation();
-        await this.updateMyLocation(loc.lat, loc.lon);
+        await this.updateMyLocation(loc.lat, loc.lon, loc.accuracy);
         btn.textContent = '✅ Posizione aggiornata!';
         setTimeout(() => {
           btn.textContent = '📍 Aggiorna la Mia Posizione';
