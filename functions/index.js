@@ -47,7 +47,7 @@ exports.sendPushNotification = functions
       data: {
         type: data.type || "generic",
         coupleId: coupleId,
-        from: data.from || "",
+        sender: data.from || "",
       },
       webpush: {
         headers: {
