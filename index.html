@@ -167,9 +167,16 @@
           <div class="stat-label">Giorni Insieme</div>
           <div class="stat-value" id="days-together">--</div>
         </div>
-        <div class="stat">
+        <div class="stat stat-meet" id="meet-stat">
           <div class="stat-label">Prossimo Incontro</div>
-          <div class="stat-value" id="days-until-meet">Presto ✨</div>
+          <div class="stat-value countdown-value" id="days-until-meet">Presto ✨</div>
+          <div class="meet-date-display" id="meet-date-display"></div>
+          <div class="meet-edit-row hidden" id="meet-edit-row">
+            <input type="date" id="meet-date-input" class="meet-date-input">
+            <button id="meet-date-save" class="btn btn-small btn-primary">✓</button>
+            <button id="meet-date-clear" class="btn btn-small btn-ghost">✕</button>
+          </div>
+          <div class="meet-tap-hint" id="meet-tap-hint">Tocca per impostare</div>
         </div>
       </div>
     </div>
