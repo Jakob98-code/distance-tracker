@@ -408,6 +408,9 @@ class DistanceTracker {
       this.listenToNextMeetDate();
       this.listenToLocations();
       
+      // Pass couple ID to native widget (if running in Capacitor)
+      this.syncWidgetConfig();
+      
       // Auto-resume tracking if it was active before the app was closed
       if (localStorage.getItem('autoTrackingEnabled') === 'true') {
         console.log('Resuming auto-tracking from previous session');
@@ -1140,6 +1143,23 @@ class DistanceTracker {
       receivedEl.classList.add('hidden');
       receivedEl.classList.remove('thinking-animate');
     }, 5000);
+  }
+
+  // ========== NATIVE WIDGET BRIDGE ==========
+
+  syncWidgetConfig() {
+    try {
+      if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.WidgetBridge) {
+        window.Capacitor.Plugins.WidgetBridge.setCoupleId({
+          coupleId: this.config.coupleId,
+          person1Name: this.config.person1Name || 'J',
+          person2Name: this.config.person2Name || 'D'
+        });
+        console.log('Widget config synced:', this.config.coupleId);
+      }
+    } catch (e) {
+      // Not running in Capacitor, ignore
+    }
   }
 
   // ========== PWA ==========

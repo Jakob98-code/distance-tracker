@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Distance -->
+    <TextView
+        android:id="@+id/widget_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-- km"
+        android:textColor="#FFFFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- Initials row: J -💕- D -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/widget_initial1"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/initial_circle"
+            android:gravity="center"
+            android:text="J"
+            android:textColor="#FFFFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:background="#66ff6b9d" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💕"
+            android:textSize="16sp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:background="#66ff6b9d" />
+
+        <TextView
+            android:id="@+id/widget_initial2"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/initial_circle"
+            android:gravity="center"
+            android:text="D"
+            android:textColor="#FFFFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Countdown -->
+    <TextView
+        android:id="@+id/widget_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prossimo incontro: --"
+        android:textColor="#FFff6b9d"
+        android:textSize="13sp" />
+
+    <!-- Last update -->
+    <TextView
+        android:id="@+id/widget_updated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ultimo agg.: --"
+        android:textColor="#88ffffff"
+        android:textSize="10sp"
+        android:layout_marginTop="4dp" />
+
+</LinearLayout>

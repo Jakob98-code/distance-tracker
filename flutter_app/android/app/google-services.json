@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "193644544453",
+    "firebase_url": "https://distance-tracker-c8bbf-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "distance-tracker-c8bbf",
+    "storage_bucket": "distance-tracker-c8bbf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193644544453:android:06edeaca0b0a3f3f6ccbac",
+        "android_client_info": {
+          "package_name": "com.distanza.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDff6X5E7KsN5KF8OvZ3DYVmBYWMUlhVW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
