@@ -553,6 +553,83 @@ body {
   }
 }
 
+/* ========== NEXT MEET DATE PICKER ========== */
+
+.countdown-value {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+.cd-num {
+  font-weight: 800;
+}
+
+.cd-label {
+  font-size: 0.5em;
+  font-weight: 600;
+  opacity: 0.6;
+  margin-right: 2px;
+}
+
+.stat-meet {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.meet-date-display {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.meet-tap-hint {
+  font-size: 10px;
+  opacity: 0.4;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.meet-edit-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.meet-edit-row.hidden {
+  display: none;
+}
+
+.meet-date-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #e9eef7;
+  padding: 6px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.meet-date-input:focus {
+  border-color: #ff6b9d;
+  box-shadow: 0 0 8px rgba(255, 107, 157, 0.3);
+}
+
+/* Color scheme for date input calendar icon */
+.meet-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.6);
+  cursor: pointer;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 14px;
+  min-width: unset;
+  border-radius: 8px;
+}
+
 /* ========== LOCATION CARDS ========== */
 
 .locations-grid {

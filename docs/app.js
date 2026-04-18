@@ -386,9 +386,9 @@ class DistanceTracker {
     this.trackingFallbackInterval = null;
     this.messaging = null;
     
-    // Relationship dates (configurable)
+    // Relationship dates
     this.relationshipStart = new Date('2025-02-28');
-    this.nextMeetDate = new Date('2026-04-01');
+    this.nextMeetDate = null; // Loaded from Firebase
     
     // Don't init automatically - wait for PIN unlock
   }
@@ -405,6 +405,7 @@ class DistanceTracker {
       await this.initFirebase();
       this.initMap();
       this.updateDaysCounter();
+      this.listenToNextMeetDate();
       this.listenToLocations();
       
       // Auto-resume tracking if it was active before the app was closed
@@ -775,24 +776,70 @@ class DistanceTracker {
   }
 
   updateDaysCounter() {
-    const today = new Date();
-    const daysTogether = Math.floor((today - this.relationshipStart) / (1000 * 60 * 60 * 24));
+    const now = new Date();
+    const daysTogether = Math.floor((now - this.relationshipStart) / (1000 * 60 * 60 * 24));
     document.getElementById('days-together').textContent = daysTogether;
 
     if (this.nextMeetDate) {
-      const daysUntil = Math.floor((this.nextMeetDate - today) / (1000 * 60 * 60 * 24)) + 1; // +1 to count full days
-      if (daysUntil >= 0) {
-        document.getElementById('days-until-meet').textContent = `${daysUntil} giorni`;
+      const diff = this.nextMeetDate - now;
+      if (diff >= 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const pad = (n) => String(n).padStart(2, '0');
+        document.getElementById('days-until-meet').innerHTML =
+          `<span class="cd-num">${days}</span><span class="cd-label">g</span> ` +
+          `<span class="cd-num">${pad(hours)}</span><span class="cd-label">h</span> ` +
+          `<span class="cd-num">${pad(minutes)}</span><span class="cd-label">m</span> ` +
+          `<span class="cd-num">${pad(seconds)}</span><span class="cd-label">s</span>`;
       } else {
         document.getElementById('days-until-meet').textContent = 'Presto ✨';
       }
+    } else {
+      document.getElementById('days-until-meet').textContent = 'Presto ✨';
     }
 
-    // Update every minute (clear previous interval to avoid stacking)
+    // Update every second (clear previous interval to avoid stacking)
     if (this.daysCounterInterval) {
       clearInterval(this.daysCounterInterval);
     }
-    this.daysCounterInterval = setInterval(() => this.updateDaysCounter(), 60000);
+    this.daysCounterInterval = setInterval(() => this.updateDaysCounter(), 1000);
+  }
+
+  // ========== NEXT MEET DATE (FIREBASE SYNCED) ==========
+
+  listenToNextMeetDate() {
+    const coupleId = this.config.coupleId;
+    this.db.ref(`couples/${coupleId}/nextMeetDate`).on('value', (snapshot) => {
+      const dateStr = snapshot.val();
+      if (dateStr) {
+        this.nextMeetDate = new Date(dateStr);
+        document.getElementById('meet-date-input').value = dateStr;
+        const formatted = this.nextMeetDate.toLocaleDateString('it-IT', {
+          day: 'numeric', month: 'long', year: 'numeric'
+        });
+        document.getElementById('meet-date-display').textContent = formatted;
+        document.getElementById('meet-tap-hint').textContent = 'Tocca per modificare';
+      } else {
+        this.nextMeetDate = null;
+        document.getElementById('meet-date-input').value = '';
+        document.getElementById('meet-date-display').textContent = '';
+        document.getElementById('meet-tap-hint').textContent = 'Tocca per impostare';
+      }
+      document.getElementById('meet-edit-row').classList.add('hidden');
+      this.updateDaysCounter();
+    });
+  }
+
+  async saveNextMeetDate(dateStr) {
+    const coupleId = this.config.coupleId;
+    if (dateStr) {
+      await this.db.ref(`couples/${coupleId}/nextMeetDate`).set(dateStr);
+    } else {
+      await this.db.ref(`couples/${coupleId}/nextMeetDate`).remove();
+    }
   }
 
   timeAgo(timestamp) {
@@ -878,6 +925,29 @@ class DistanceTracker {
     // Enable notifications
     document.getElementById('enable-notifications')?.addEventListener('click', () => {
       this.requestNotificationPermission();
+    });
+
+    // Next meet date picker
+    document.getElementById('meet-stat')?.addEventListener('click', (e) => {
+      // Don't toggle if clicking on the input or buttons
+      if (e.target.closest('#meet-edit-row')) return;
+      const editRow = document.getElementById('meet-edit-row');
+      const hint = document.getElementById('meet-tap-hint');
+      editRow.classList.toggle('hidden');
+      hint.classList.add('hidden');
+    });
+
+    document.getElementById('meet-date-save')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dateVal = document.getElementById('meet-date-input').value;
+      if (dateVal) {
+        this.saveNextMeetDate(dateVal);
+      }
+    });
+
+    document.getElementById('meet-date-clear')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.saveNextMeetDate(null);
     });
 
     // Settings
